@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Digital Agency</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React + ReactDOM -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel for JSX -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.20/babel.min.js"></script>
+  
+  <style>
+    .hero-container {
+      position: relative;
+      background-image: linear-gradient(to right, #e33030, #fcebeb);
+    }
+    .hero-container::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      background-color: transparent;
+      border-radius: 50% 0 0 50% / 100% 0 0 100%;
+      transform: scaleY(1.5) translateX(30%);
+      z-index: 10;
+    }
+    .hero-image-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 35%;
+      overflow: hidden;
+      z-index: 15;
+      -webkit-clip-path: ellipse(80% 100% at 100% 50%);
+      clip-path: ellipse(100% 100% at 100% 50%);
+    }
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    @media (max-width: 1024px) {
+      .hero-container::after {
+        width: 100%;
+        border-radius: 50% / 100% 0 0 100%;
+        transform: scaleY(1.2) translateX(30%);
+      }
+      .hero-image-container {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const navItems = [
+      { name: "Home", href: "homePage.html", dropdown: false },
+      {
+        name: "Solutions",
+        href: "solutions.html",
+        dropdown: true,
+        items: [
+          { name: "Dummy 1", href: "#dummy1" },
+          { name: "Dummy 2", href: "#dummy2" }
+        ]
+      },
+      { name: "Pricing", href: "pricing.html", dropdown: false },
+      { name: "About Us", href: "about.html", dropdown: false }
+    ];
+
+    const DropdownItem = ({ name, items, href, isShrunk }) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const navItemClasses = isShrunk
+        ? "p-2 font-medium text-xs rounded-md hover:bg-white/20 transition-colors duration-200"
+        : "p-2 font-medium text-xs rounded-md hover:bg-red-500 hover:text-white transition-colors duration-200";
+
+    return (
+        <div
+            className="relative group" // Add 'group' here
+            onMouseEnter={() => setIsOpen(true)}
+            onMouseLeave={() => setIsOpen(false)}
+        >
+            <a
+                href={href}
+                className={`${navItemClasses} flex items-center space-x-1 p-2`}
+            >
+                <span>{name}</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    className={`h-3 w-3 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+            </a>
+
+            {/* This dropdown menu is now a child of the same container */}
+            <div className={`absolute top-full left-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-lg z-50 transition-all duration-300 transform origin-top
+                ${isOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'}`}>
+                {items.map((sub, index) => (
+                    <a
+                        key={index}
+                        href={sub.href}
+                        className="block px-4 py-2 rounded-lg text-sm hover:bg-red-500 hover:text-white transition-colors duration-200"
+                    >
+                        {sub.name}
+                    </a>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+    const Navbar = () => {
+      const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+      const [isShrunk, setIsShrunk] = useState(false);
+
+      useEffect(() => {
+        const handleScroll = () => setIsShrunk(window.scrollY > 50);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+      }, []);
+
+      const navbarClasses = `
+        fixed top-0 left-0 w-full z-50 shadow-lg
+        transition-all duration-300
+        ${isShrunk ? 'bg-red-500 text-white py-2' : 'bg-white text-gray-800 py-4'}
+      `;
+
+      const navItemClasses = isShrunk
+        ? "p-2 font-medium text-xs rounded-md hover:bg-white/20 transition-colors duration-200"
+        : "p-2 font-medium text-xs rounded-md hover:bg-red-500 hover:text-white transition-colors duration-200";
+
+      const logoClasses = `transition-all duration-300 ${isShrunk ? 'h-8' : 'h-10'}`;
+      const contactButtonClasses = `
+        font-bold py-2 px-4 rounded-full transition-all duration-300
+        ${isShrunk
+          ? 'bg-white text-red-500 hover:bg-gray-200'
+          : 'bg-red-500 text-white hover:bg-red-600'}
+      `;
+
+      return (
+        <nav className={navbarClasses}>
+          <div className="container mx-auto flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <img
+                src={isShrunk ? "resources/castlesalt.png" : "resources/logocastles.png"}
+                onError="this.onerror=null;this.src='https://placehold.co/100x40/ffffff/000000?text=Logo';"
+                alt="Castles Logo"
+                className={logoClasses}
+              />
+            </div>
+            <div className="hidden lg:flex flex-1 justify-center items-center space-x-8">
+              {navItems.map((item, index) =>
+                item.dropdown ? (
+                  <DropdownItem key={index} name={item.name} items={item.items} href={item.href} isShrunk={isShrunk} />
+                ) : (
+                  <a key={index} href={item.href} className={navItemClasses}>{item.name}</a>
+                )
+              )}
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="hidden lg:flex">
+                <a href="contacts.html" className={contactButtonClasses}>Contact Us</a>
+              </div>
+              <div className="lg:hidden">
+                <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                  <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {isMobileMenuOpen && (
+            <div className="lg:hidden mt-4 space-y-2">
+              <a href="contacts.html"
+                 className="block p-2 font-bold rounded-md text-sm text-center bg-red-500 text-white hover:bg-red-600 transition-colors">
+                 Contact Us
+              </a>
+              {navItems.map((item, index) =>
+                item.dropdown ? (
+                  <DropdownItem key={index} name={item.name} items={item.items} isShrunk={isShrunk} />
+                ) : (
+                  <a key={index} href={item.href}
+                     className="block p-2 text-gray-800 font-medium rounded-md hover:bg-gray-100 transition-colors duration-200 text-sm">
+                    {item.name}
+                  </a>
+                )
+              )}
+            </div>
+          )}
+        </nav>
+      );
+    };
+
+    const Hero = () => (
+      <section className="relative overflow-hidden h-[500px] flex hero-container">
+        <div className="relative w-full lg:w-[70%] flex flex-col items-center justify-center text-white px-8 py-16 z-20">
+          <div className="relative z-20 space-y-6 max-w-2xl text-center lg:text-left">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">Pricings</h1>
+            <p className="text-base sm:text-lg text-white">
+              BLA BLA BLA
+            </p>
+            <div className="flex justify-center lg:justify-start">
+              <a href="contacts.html"
+                 className="bg-white text-main-theme-dark font-bold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-sm sm:text-base inline-flex items-center">
+                 Contact Sales &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="relative w-full lg:w-[30%] z-10 hero-image-container">
+          <img src="resources/product.png" alt="Product"
+               className="hero-image"
+               onError={(e) => { e.target.src='https://placehold.co/500x500/fcebeb/e33030?text=Product'; }}/>
+        </div>
+      </section>
+    );
+
+    // ✅ New Section 1: About POS
+    const AboutPOS = () => (
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6 text-center max-w-4xl">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">About Our POS</h2>
+          <p className="text-gray-600 text-lg">
+            Our Point of Sale solutions are designed to empower businesses of all sizes with seamless,
+            secure, and scalable payment technology. From small shops to enterprise retailers,
+            our systems adapt to your workflow.
+          </p>
+        </div>
+      </section>
+    );
+
+    // ✅ New Section 2: Our Terminal Models
+    const TerminalModels = () => (
+      <section className="py-20 bg-gray-100">
+        
+      </section>
+    );
+
+    const App = () => (
+      <>
+        <Navbar />
+        <Hero />
+        <AboutPOS />
+        <TerminalModels />
+      </>
+    );
+
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+</html>
