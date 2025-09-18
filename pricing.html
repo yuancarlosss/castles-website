@@ -5,14 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Digital Agency</title>
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- React + ReactDOM -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 
-  <!-- Babel for JSX -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.20/babel.min.js"></script>
   
   <style>
@@ -91,7 +88,7 @@
 
     return (
         <div
-            className="relative group" // Add 'group' here
+            className="relative group"
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={() => setIsOpen(false)}
         >
@@ -106,8 +103,6 @@
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
             </a>
-
-            {/* This dropdown menu is now a child of the same container */}
             <div className={`absolute top-full left-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-lg z-50 transition-all duration-300 transform origin-top
                 ${isOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'}`}>
                 {items.map((sub, index) => (
@@ -185,7 +180,6 @@
               </div>
             </div>
           </div>
-
           {isMobileMenuOpen && (
             <div className="lg:hidden mt-4 space-y-2">
               <a href="contacts.html"
@@ -214,7 +208,7 @@
           <div className="relative z-20 space-y-6 max-w-2xl text-center lg:text-left">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">Pricings</h1>
             <p className="text-base sm:text-lg text-white">
-              BLA BLA BLA
+              View our rates across all payment solutions.
             </p>
             <div className="flex justify-center lg:justify-start">
               <a href="contacts.html"
@@ -227,29 +221,454 @@
         <div className="relative w-full lg:w-[30%] z-10 hero-image-container">
           <img src="resources/product.png" alt="Product"
                className="hero-image"
-               onError={(e) => { e.target.src='https://placehold.co/500x500/fcebeb/e33030?text=Product'; }}/>
+               onError={(e) => { e.target.src='resources/product.png'; }}/>
         </div>
       </section>
     );
 
-    // ✅ New Section 1: About POS
-    const AboutPOS = () => (
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6 text-center max-w-4xl">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">About Our POS</h2>
-          <p className="text-gray-600 text-lg">
-            Our Point of Sale solutions are designed to empower businesses of all sizes with seamless,
-            secure, and scalable payment technology. From small shops to enterprise retailers,
-            our systems adapt to your workflow.
-          </p>
-        </div>
-      </section>
-    );
+    const pricingData = {
+      OnePOS: {
+        title: "OnePOS",
+        cards: [
+          {
+            type: "Cards",
+            rate: "3.00%",
+            notes: null,
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=VISA",
+              "https://placehold.co/80x50/ffffff/000000?text=Mastercard",
+              "https://placehold.co/80x50/ffffff/000000?text=JCB",
+              "https://placehold.co/80x50/ffffff/000000?text=UnionPay",
+              "https://placehold.co/80x50/ffffff/000000?text=Amex",
+              "https://placehold.co/80x50/ffffff/000000?text=BancNet"
+            ]
+          },
+          {
+            type: "E-Wallet",
+            rate: "2.25%",
+            notes: "Includes GCredits and GGives",
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=GCash"
+            ]
+          },
+          {
+            type: "E-Wallet",
+            rate: "1.50%",
+            notes: null,
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=WeChatPay",
+              "https://placehold.co/80x50/ffffff/000000?text=Alipay",
+              "https://placehold.co/80x50/ffffff/000000?text=QRPh"
+            ]
+          }
+        ]
+      },
+      Mobile: {
+        title: "Mobile",
+        cards: [
+          {
+            type: "E-Wallet",
+            rate: "2.25%",
+            notes: "Includes GCredits and GGives",
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=GCash"
+            ]
+          },
+          {
+            type: "E-Wallet",
+            rate: "1.50%",
+            notes: null,
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=WeChatPay",
+              "https://placehold.co/80x50/ffffff/000000?text=Alipay",
+              "https://placehold.co/80x50/ffffff/000000?text=QRPh"
+            ]
+          }
+        ]
+      },
+      Checkout: {
+        title: "Checkout",
+        cards: [
+          {
+            type: "Cards",
+            rate: "3.50%",
+            notes: "+15.00 per transaction\n+1.00% for int'l credit cards",
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=Mastercard",
+              "https://placehold.co/80x50/ffffff/000000?text=Visa"
+            ]
+          },
+          {
+            type: "E-Wallet",
+            rate: "2.25%",
+            notes: "Includes GCredits and GGives",
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=GCash"
+            ]
+          },
+          {
+            type: "E-Wallet",
+            rate: "1.50%",
+            notes: null,
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=QRPh",
+              "https://placehold.co/80x50/ffffff/000000?text=BillEase"
+            ]
+          },
+          {
+            type: "Online Banking",
+            rate: "1.50%",
+            notes: "or Min of Php 15.00 whichever is higher",
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=RCBC",
+              "https://placehold.co/80x50/ffffff/000000?text=RobinsonsBank",
+              "https://placehold.co/80x50/ffffff/000000?text=PNB",
+              "https://placehold.co/80x50/ffffff/000000?text=Maybank",
+              "https://placehold.co/80x50/ffffff/000000?text=PSBank",
+              "https://placehold.co/80x50/ffffff/000000?text=Landbank",
+              "https://placehold.co/80x50/ffffff/000000?text=ChinaBank",
+              "https://placehold.co/80x50/ffffff/000000?text=Security+Bank",
+              "https://placehold.co/80x50/ffffff/000000?text=EastWest",
+              "https://placehold.co/80x50/ffffff/000000?text=Unionbank",
+              "https://placehold.co/80x50/ffffff/000000?text=BPI",
+              "https://placehold.co/80x50/ffffff/000000?text=BDO",
+              "https://placehold.co/80x50/ffffff/000000?text=Metrobank"
+            ]
+          },
+          {
+            type: "OTC Banks",
+            rate: "1.50%",
+            notes: "or Min of Php 20.00 whichever is higher",
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=RCBC",
+              "https://placehold.co/80x50/ffffff/000000?text=Landbank",
+              "https://placehold.co/80x50/ffffff/000000?text=Unionbank",
+              "https://placehold.co/80x50/ffffff/000000?text=BPI",
+              "https://placehold.co/80x50/ffffff/000000?text=RobinsonsBank",
+              "https://placehold.co/80x50/ffffff/000000?text=ChinaBank",
+              "https://placehold.co/80x50/ffffff/000000?text=Metrobank",
+              "https://placehold.co/80x50/ffffff/000000?text=AUB",
+              "https://placehold.co/80x50/ffffff/000000?text=PNB",
+              "https://placehold.co/80x50/ffffff/000000?text=Security+Bank",
+              "https://placehold.co/80x50/ffffff/000000?text=EastWest",
+              "https://placehold.co/80x50/ffffff/000000?text=BDO"
+            ]
+          },
+          {
+            type: "OTC Non-Banks",
+            rate: "1.50%",
+            notes: "or Min of Php 25.00 whichever is higher",
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=USC",
+              "https://placehold.co/80x50/ffffff/000000?text=Bills+Pay",
+              "https://placehold.co/80x50/ffffff/000000?text=M.Lhuillier",
+              "https://placehold.co/80x50/ffffff/000000?text=Villarica",
+              "https://placehold.co/80x50/ffffff/000000?text=CVM",
+              "https://placehold.co/80x50/ffffff/000000?text=Tambunting",
+              "https://placehold.co/80x50/ffffff/000000?text=Palawan",
+              "https://placehold.co/80x50/ffffff/000000?text=Cebuana"
+            ]
+          }
+        ]
+      },
+      EasyLink: {
+        title: "EasyLink",
+        cards: [
+          {
+            type: "Cards",
+            rate: "3.50%",
+            notes: "+15.00 per transaction\n+1.00% for int'l credit cards",
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=Mastercard",
+              "https://placehold.co/80x50/ffffff/000000?text=Visa"
+            ]
+          },
+          {
+            type: "E-Wallet",
+            rate: "2.25%",
+            notes: "Includes GCredits and GGives",
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=GCash"
+            ]
+          },
+          {
+            type: "E-Wallet",
+            rate: "1.50%",
+            notes: null,
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=QRPh",
+              "https://placehold.co/80x50/ffffff/000000?text=BillEase"
+            ]
+          }
+        ]
+      },
+      ExpressPOS: {
+        title: "ExpressPOS",
+        cards: [
+          {
+            type: "Cards",
+            rate: "3.00%",
+            notes: "+1.00% for int'l credit cards",
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=Mastercard",
+              "https://placehold.co/80x50/ffffff/000000?text=Visa",
+              "https://placehold.co/80x50/ffffff/000000?text=American+Express"
+            ]
+          },
+          {
+            type: "E-Wallet",
+            rate: "2.25%",
+            notes: "Includes GCredits and GGives",
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=GCash"
+            ]
+          },
+          {
+            type: "E-Wallet",
+            rate: "1.50%",
+            notes: null,
+            images: [
+              "https://placehold.co/80x50/ffffff/000000?text=WeChatPay",
+              "https://placehold.co/80x50/ffffff/000000?text=Alipay",
+              "https://placehold.co/80x50/ffffff/000000?text=QRPh"
+            ]
+          }
+        ]
+      }
+    };
+    
+    // Updated calculation logic to handle different method types
+    const calculateFee = (amount, solution, method) => {
+      const results = [];
+      const solutionData = pricingData[solution];
 
-    // ✅ New Section 2: Our Terminal Models
-    const TerminalModels = () => (
-      <section className="py-20 bg-gray-100">
+      if (!solutionData) return results;
+      
+      const matchingCards = solutionData.cards.filter(card => card.type === method);
+
+      if (matchingCards.length === 0) {
+        return results;
+      }
+
+      for (const card of matchingCards) {
+        let fee = 0;
+        const rawRate = parseFloat(card.rate.replace('%', '')) / 100;
+        let calculatedFee = amount * rawRate;
+
+        if (card.notes) {
+          if (card.notes.includes('+15.00 per transaction')) {
+            calculatedFee += 15;
+          } else if (card.notes.includes('Min of Php 15.00')) {
+            calculatedFee = Math.max(calculatedFee, 15);
+          } else if (card.notes.includes('Min of Php 20.00')) {
+            calculatedFee = Math.max(calculatedFee, 20);
+          } else if (card.notes.includes('Min of Php 25.00')) {
+            calculatedFee = Math.max(calculatedFee, 25);
+          }
+        }
         
+        fee = calculatedFee;
+        const netAmount = amount - fee;
+        
+        results.push({
+          fee: fee.toFixed(2),
+          net: netAmount.toFixed(2),
+          rate: card.rate,
+          logos: card.images,
+          notes: card.notes
+        });
+      }
+      return results;
+    };
+
+    const PricingCalculator = () => {
+      const [amount, setAmount] = useState("");
+      const [solution, setSolution] = useState(null);
+      const [method, setMethod] = useState(null);
+      const [results, setResults] = useState([]);
+      const [isAmountValid, setIsAmountValid] = useState(true);
+
+      const handleAmountChange = (e) => {
+        const value = e.target.value;
+        setAmount(value);
+        if (parseFloat(value) < 100 && value !== "") {
+          setIsAmountValid(false);
+        } else {
+          setIsAmountValid(true);
+        }
+      };
+
+      const handleSolutionChange = (selectedSolution) => {
+        setSolution(selectedSolution);
+        setMethod(null);
+      };
+
+      const handleMethodChange = (selectedMethod) => {
+        setMethod(selectedMethod);
+      };
+
+      useEffect(() => {
+        if (amount >= 100 && solution && method) {
+          const calculatedResults = calculateFee(parseFloat(amount), solution, method);
+          setResults(calculatedResults);
+        } else {
+          setResults([]);
+        }
+      }, [amount, solution, method]);
+
+      const getPaymentMethods = () => {
+        if (!solution) return [];
+        const solutionData = pricingData[solution];
+        const methods = [...new Set(solutionData.cards.map(card => card.type))];
+        return methods;
+      };
+
+      return (
+        <div className="bg-red-50 p-8 rounded-lg shadow-lg">
+          <h2 className="text-3xl font-bold text-gray-800 mb-6">Try our pricing calculator</h2>
+
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-2">Enter amount</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">₱</span>
+              <input
+                type="number"
+                min="0"
+                value={amount}
+                onChange={handleAmountChange}
+                className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
+            </div>
+            {!isAmountValid && amount !== "" && (
+              <p className="text-red-500 text-sm mt-1">Amount should be at least ₱100</p>
+            )}
+          </div>
+          
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-2">Select payment solution</label>
+            <div className="grid grid-cols-2 gap-3">
+              {Object.keys(pricingData).map(sol => (
+                <button
+                  key={sol}
+                  onClick={() => handleSolutionChange(sol)}
+                  className={`py-3 px-4 rounded-lg font-semibold transition-colors duration-200
+                    ${solution === sol ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                >
+                  {pricingData[sol].title}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          {solution && (
+            <div className="mb-6">
+              <label className="block text-gray-700 font-medium mb-2">Customer's payment method</label>
+              <div className="grid grid-cols-2 gap-3">
+                {getPaymentMethods().map(meth => (
+                  <button
+                    key={meth}
+                    onClick={() => handleMethodChange(meth)}
+                    className={`py-3 px-4 rounded-lg font-semibold transition-colors duration-200
+                      ${method === meth ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+                  >
+                    {meth}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {amount >= 100 && solution && method && (
+            <div className="bg-white p-6 rounded-lg shadow-inner">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">Transaction breakdown</h3>
+              
+              {results.length > 0 && results.map((result, index) => (
+                <div key={index} className="mb-4 last:mb-0">
+                  <p className="text-sm text-gray-600 mb-2">
+                    Customer pays via **{method.toLowerCase()}**. All fees are VAT-inclusive.
+                  </p>
+                  
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {result.logos.map((logo, logoIndex) => (
+                        <img key={logoIndex} src={logo} alt={`Logo ${logoIndex}`} className="h-8" />
+                      ))}
+                    </div>
+                    <div className="bg-red-200 text-red-800 font-semibold px-4 py-1 rounded-full">{result.rate}</div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-left">
+                      <span className="text-sm font-semibold text-gray-700 block">₱{result.fee}</span>
+                      <span className="text-xs text-gray-500 block">CastlesTech Fee</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-sm font-semibold text-gray-700 block">₱{result.net}</span>
+                      <span className="text-xs text-gray-500 block">Net amount</span>
+                    </div>
+                  </div>
+                  {results.length > 1 && index < results.length - 1 && (
+                    <hr className="my-4 border-t border-gray-300"/>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    const PricingDisplay = () => (
+      <div className="space-y-12">
+        {Object.keys(pricingData).map(solutionKey => {
+          const solution = pricingData[solutionKey];
+          return (
+            <div key={solutionKey} className="bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+              <h2 className="text-3xl font-bold text-gray-800 mb-8 text-left">{solution.title}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {solution.cards.map((card, index) => (
+                  <div key={index} className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-sm font-bold text-gray-900 rounded-full border border-red-500 py-1 px-4">{card.type}</h3>
+                      <div className="text-xl font-bold text-gray-800 text-right">
+                        {card.rate}
+                        {card.notes && card.notes.split('\n').map((note, noteIndex) => (
+                          <span key={noteIndex} className="text-xs font-normal text-gray-500 block">{note}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {card.images.map((image, imgIndex) => (
+                        <img
+                          key={imgIndex}
+                          src={image}
+                          alt={image.split('?text=')[1].replace('+', ' ')}
+                          className="h-10 hover:transform hover:scale-110 transition-all duration-300"
+                          onError={(e) => { e.target.src='https://placehold.co/80x50/ffffff/000000?text=Logo'; }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+
+    const PricingCombined = () => (
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Left Column: Calculator (30%) */}
+          <div className="lg:col-span-4 lg:sticky lg:top-24 lg:h-fit self-start">
+            <PricingCalculator />
+          </div>
+          {/* Right Column: Pricing Display (70%) */}
+          <div className="lg:col-span-8">
+            <PricingDisplay />
+          </div>
+        </div>
       </section>
     );
 
@@ -257,8 +676,7 @@
       <>
         <Navbar />
         <Hero />
-        <AboutPOS />
-        <TerminalModels />
+        <PricingCombined />
       </>
     );
 
