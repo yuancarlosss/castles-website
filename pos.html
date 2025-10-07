@@ -92,15 +92,18 @@
   <script type="text/babel">
     
     const Hero = () => (
-  // Main container with a light background for high contrast. Added pt-28 for fixed Navbar.
-  <section className="relative overflow-hidden bg-gray-50 min-h-[500px] py-16 pt-28">
-    
+  // Main container: min-h reduced to 500px, py-16 retained, pt-28 retained.
+  <section className="relative overflow-hidden bg-white min-h-[500px] py-16 pt-28">
+
+    {/* Decorative background shape: Sizing reduced to match the new, smaller scale */}
+    <div className="absolute top-0 right-0 w-2/5 h-full bg-red-50/50 rounded-bl-[150px] hidden lg:block"></div>
+
     {/* Content Wrapper (max width and centered) */}
     <div className="container mx-auto px-4 relative z-10">
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-        
-        {/* LEFT SIDE: Solution Headline and Call to Action */}
-        <div className="w-full lg:w-1/2 space-y-4 text-center lg:text-left p-4">
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-8"> {/* Reduced gap from 12 to 8 */}
+
+       {/* LEFT SIDE: Solution Headline and Call to Action */}
+       <div className="w-full lg:w-1/2 space-y-4 text-center lg:text-left p-4">
           <p className="text-sm font-semibold uppercase tracking-widest text-red-500">
             Accept All Payments
           </p>
@@ -123,15 +126,14 @@
             </button>
           </div>
         </div>
-        
+
         {/* RIGHT SIDE: Hero Image */}
         <div className="w-full lg:w-1/2 flex justify-center lg:justify-end p-4">
-            {/* Using the provided image path */}
-            <img 
-              src="resources/bg2.png" 
-              alt="In-Store Payment Solutions Terminal" 
-              className="w-full max-w-lg h-auto rounded-xl shadow-lg object-cover"
-            />
+          <img
+            src="resources/store.png" 
+            alt="Digital Online Payment Interface"
+            className="w-full max-w-lg h-auto rounded-3xl shadow-2xl object-cover transform transition duration-500 hover:scale-[1.02]" // max-w-xl reduced to max-w-lg
+          />
         </div>
       </div>
     </div>
