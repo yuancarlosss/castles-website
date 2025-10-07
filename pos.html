@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Castles Technology Philippines</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.20/babel.min.js"></script>
+  
+  <style>
+    /* NOTE: The new Hero component below uses Tailwind for styling, 
+       but keeping this custom CSS block intact as per the request. */
+    .hero-container {
+      position: relative;
+      background-image: linear-gradient(to right, #e33030, #fcebeb);
+    }
+    .hero-container::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      background-color: transparent;
+      border-radius: 50% 0 0 50% / 100% 0 0 100%;
+      transform: scaleY(1.5) translateX(30%);
+      z-index: 10;
+    }
+    .hero-image-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 35%;
+      overflow: hidden;
+      z-index: 15;
+      -webkit-clip-path: ellipse(80% 100% at 100% 50%);
+      clip-path: ellipse(100% 100% at 100% 50%);
+    }
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    @media (max-width: 1024px) {
+      .hero-container::after {
+        width: 100%;
+        border-radius: 50% / 100% 0 0 100%;
+        transform: scaleY(1.2) translateX(30%);
+      }
+      .hero-image-container {
+        width: 100%;
+      }
+    }
+    /* --- CSS for Marquee Logo Animation --- */
+    .marquee-left {
+      animation: marquee-left 25s linear infinite; /* Moves Left (Enter from Right) */
+      display: flex;
+      white-space: nowrap;
+      width: max-content;
+    }
+    .marquee-right {
+      animation: marquee-right 25s linear infinite; /* Moves Right (Enter from Left) */
+      display: flex;
+      white-space: nowrap;
+      width: max-content;
+    }
+
+    /* Moves content left (0% to -50%) */
+    @keyframes marquee-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); } 
+    }
+    /* Moves content right (-50% to 0%) */
+    @keyframes marquee-right {
+      0% { transform: translateX(-50%); } 
+      100% { transform: translateX(0%); } 
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div id="root"></div>
+
+  <script type="text/babel" src="scripts/navBar.js"></script>
+  <script type="text/babel" src="scripts/footer.js"></script>
+  <script type="text/babel">
+    
+    const Hero = () => (
+  // Main container with a light background for high contrast. Added pt-28 for fixed Navbar.
+  <section className="relative overflow-hidden bg-gray-50 min-h-[500px] py-16 pt-28">
+    
+    {/* Content Wrapper (max width and centered) */}
+    <div className="container mx-auto px-4 relative z-10">
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+        
+        {/* LEFT SIDE: Solution Headline and Call to Action */}
+        <div className="w-full lg:w-1/2 space-y-4 text-center lg:text-left p-4">
+          <p className="text-sm font-semibold uppercase tracking-widest text-red-500">
+            Accept All Payments
+          </p>
+          {/* Solution Name stands out with large, bold font and red accent */}
+          <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black text-gray-900 leading-none">
+            IN-STORE
+            {/* Accent color changed to red-500 */}
+            <span className="block text-4xl sm:text-5xl lg:text-6xl font-extrabold text-red-500 mt-2">
+              SOLUTIONS
+            </span>
+          </h1>
+          <p className="text-lg text-gray-600 max-w-lg mx-auto lg:mx-0 pt-4">
+            Accept all forms of digital payments with an all-in-one E-Wallet, QR Code, and debit and credit card machine. Seamless, fast, and secure for your business.
+          </p>
+          
+          <div className="pt-6 flex flex-col sm:flex-row justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4">
+            {/* Primary Button: "Contact Sales" */}
+            <button className="px-8 py-3 text-lg font-semibold rounded-full shadow-xl transition duration-300 ease-in-out bg-red-500 hover:bg-red-600 text-white transform hover:scale-[1.03]">
+              Contact Sales
+            </button>
+          </div>
+        </div>
+        
+        {/* RIGHT SIDE: Hero Image */}
+        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end p-4">
+            {/* Using the provided image path */}
+            <img 
+              src="resources/bg2.png" 
+              alt="In-Store Payment Solutions Terminal" 
+              className="w-full max-w-lg h-auto rounded-xl shadow-lg object-cover"
+            />
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const POSTerminalsSection = () => {
+  const terminalImages = [
+    "resources/sample_product.png",
+    "resources/sample_product2.png",
+    // You can add more images here!
+  ];
+
+  // 1. State to manage the index of the current image
+  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+  
+  // Total number of images
+  const numImages = terminalImages.length;
+
+  // 2. useEffect to handle the auto-advancing slideshow
+  React.useEffect(() => {
+    // Set up the interval timer
+    const interval = setInterval(() => {
+      // Advance to the next image, wrapping around to 0 if it's the last one
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % numImages);
+    }, 4000); // Auto-advance every 4 seconds (4000 milliseconds)
+
+    // Clean up the interval when the component unmounts or dependencies change
+    return () => clearInterval(interval);
+  }, [numImages]); // Re-run effect only if numImages changes
+
+  // Function to handle dot clicks
+  const handleDotClick = (index) => {
+    setCurrentImageIndex(index);
+  };
+  
+  // Get the current image source
+  const currentImage = terminalImages[currentImageIndex];
+
+  return (
+    // Section container with padding and a light background
+    <section className="py-16 bg-white">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col lg:flex-row gap-12 items-center">
+          
+          {/* LEFT SIDE: Description and Details */}
+          <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
+            
+            <h2 className="text-4xl font-extrabold text-gray-900">
+              Point-of-Sale (POS) Terminals
+            </h2>
+            
+            <p className="text-lg text-gray-600">
+              Accept Visa, Mastercard, American Express, JCB, UnionPay, and BancNet card payments. Our POS terminals also allow you to accept payments via QR code.
+            </p>
+            
+            {/* Key Features List */}
+            <ul className="space-y-3 text-lg text-gray-700 list-disc list-inside lg:pl-4">
+              <li className="flex items-start">
+                <span className="text-red-500 font-bold mr-2">&bull;</span>
+                Capable of Electronic Cash Register (ECR) Integration
+              </li>
+              <li className="flex items-start">
+                <span className="text-red-500 font-bold mr-2">&bull;</span>
+                EMV Certified for secure chip card processing
+              </li>
+              <li className="flex items-start">
+                <span className="text-red-500 font-bold mr-2">&bull;</span>
+                Fully enabled for Contactless Payments (NFC)
+              </li>
+            </ul>
+
+            <div className="pt-4">
+              <button className="px-8 py-3 text-lg font-semibold rounded-full shadow-lg transition duration-300 ease-in-out bg-red-500 hover:bg-red-600 text-white transform hover:scale-[1.03]">
+                View All POS Terminals
+              </button>
+            </div>
+          </div>
+          
+          {/* RIGHT SIDE: Slideshow/Image Display */}
+          <div className="w-full lg:w-1/2 flex flex-col items-center p-4">
+            <div className="w-full max-w-xl h-[450px] bg-gray-100 rounded-xl flex items-center justify-center shadow-2xl overflow-hidden relative">
+              {/* Image with simple transition for a smooth switch */}
+              <img 
+                key={currentImageIndex} // Key forces re-render/transition when index changes
+                src={currentImage} 
+                alt="POS Terminal" 
+                className="w-full h-full object-contain p-4 transition-opacity duration-700 ease-in-out" 
+              />
+            </div>
+
+            {/* Navigation Dots */}
+            <div className="flex justify-center space-x-2 mt-4">
+              {terminalImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleDotClick(index)}
+                  className={`h-3 w-3 rounded-full transition-all duration-300 ${
+                    index === currentImageIndex 
+                      ? 'bg-red-500 w-6' // Active dot is wider and red
+                      : 'bg-gray-300 hover:bg-red-300' // Inactive dot is gray
+                  }`}
+                  aria-label={`Go to terminal slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const InstallmentProgramsSection = () => (
+  // Section container with padding and the requested light gray background
+  <section className="py-16 bg-gray-100">
+    <div className="container mx-auto px-4">
+      
+      {/* Section Header */}
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
+          Installment Programs
+        </h2>
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          Offer flexible payment options to your Metrobank and PSBank credit card customers. Enhance sales by making high-value purchases more accessible.
+        </p>
+      </div>
+
+      {/* Main Content: 3-Column Feature Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        {/* Card 1: 0% Interest */}
+        <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 text-center border-t-4 border-red-500">
+          <div className="text-5xl text-red-500 mb-4">
+            {/* Icon Placeholder for 0% */}
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V9m0 2v3m-6.579-2.275a2.25 2.25 0 010-4.5h15.158a2.25 2.25 0 010 4.5m-15.158 0a2.25 2.25 0 010-4.5m15.158 0V7.5M9 7.5a2.25 2.25 0 010-4.5h6a2.25 2.25 0 010 4.5" />
+            </svg>
+          </div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-3">
+            0% Interest Plan
+          </h3>
+          <p className="text-gray-600">
+            Boost sales conversion by offering customers the most attractive payment plan: **no interest fees** over short terms.
+          </p>
+        </div>
+
+        {/* Card 2: Shop Now, Pay Later */}
+        <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 text-center border-t-4 border-red-500">
+          <div className="text-5xl text-red-500 mb-4">
+            {/* Icon Placeholder for Time */}
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-3">
+            Shop Now, Pay Later
+          </h3>
+          <p className="text-gray-600">
+            Give customers financial flexibility by deferring their first payment, making purchases feel easier and more immediate.
+          </p>
+        </div>
+
+        {/* Card 3: Reduced Rates */}
+        <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 text-center border-t-4 border-red-500">
+          <div className="text-5xl text-red-500 mb-4">
+            {/* Icon Placeholder for Discount */}
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8V4M8 12H4m12 0h4m-4 4v4M4 4l5 5m7-5l-5 5m5 5l-5-5M4 20l5-5" />
+            </svg>
+          </div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-3">
+            Special Reduced Rates
+          </h3>
+          <p className="text-gray-600">
+            For longer payment terms, offer special reduced interest rates, giving clients more manageable monthly payments.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+);
+
+const QRPaySection = () => (
+      // Background is white to contrast with the gray installment section above
+      <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10">
+                  
+                  {/* LEFT SIDE: QR Pay Feature Description */}
+                  <div className="text-left space-y-4 lg:pr-8">
+                      <h2 className="text-5xl font-extrabold text-gray-900 mb-2">
+                          QR Pay
+                      </h2>
+                      <p className="text-lg text-gray-600">
+                          QR Pay provides merchants the capability to receive payments from customers who wish to use a source account from financial institutions or e-wallet providers using QR code as a form factor.
+                      </p>
+                      
+                      <div className="bg-red-50 p-4 rounded-lg">
+                          <p className="text-xl font-semibold text-red-700">
+                              Accepted payments include:
+                              <span className="block text-lg font-normal text-red-600 mt-1">
+                                  P2M QR Ph, Alipay, WeChat Pay, and many more major providers.
+                              </span>
+                          </p>
+                      </div>
+                  </div>
+                  
+                  {/* RIGHT SIDE: Partner Logo Marquee (Updated to remove text and ensure animation) */}
+                  <div className="space-y-8 mt-12 lg:mt-0">
+                      
+                      {/* Row 1: Scrolling RIGHT (marquee-right) - Enters from Left */}
+                      <div className="overflow-hidden">
+                          <div className="marquee marquee-right flex space-x-12">
+                              {/* Logos are duplicated for seamless looping */}
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                              
+                          </div>
+                      </div>
+
+                      {/* Row 2: Scrolling LEFT (marquee-left) - Enters from Right */}
+                      <div className="overflow-hidden">
+                          <div className="marquee marquee-left flex space-x-12">
+                              {/* Logos are duplicated for seamless looping */}
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                              <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                            
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+    );
+
+    
+
+    const App = () => (
+      <>
+        <Navbar />
+        <Hero />
+        <POSTerminalsSection />
+        <InstallmentProgramsSection />
+        <QRPaySection />
+        <Footer />
+      </>
+    );
+
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+</html>

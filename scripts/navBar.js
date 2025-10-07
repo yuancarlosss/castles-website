@@ -6,7 +6,7 @@ const { useState, useEffect, useRef } = React;
 const navItems = [
     { name: "Home", href: "homePage.html", dropdown: false },
     {
-        name: "Dummy",
+        name: "Products",
         href: "#",
         dropdown: true,
         items: [
@@ -15,9 +15,8 @@ const navItems = [
                 href: "#",
                 dropdown: true,
                 items: [
-                    { name: "Online", href: "online.html" },
-                    { name: "QR", href: "qr.html" },
-                    { name: "POS", href: "pos.html" }
+                    { name: "Online Solutions", href: "online.html" },
+                    { name: "In-Store Solutions", href: "pos.html" }
                 ]
             },
             {
@@ -44,25 +43,24 @@ const socialLinks = [
 ];
 
 const getProductLinks = () => {
-    const dummyItem = navItems.find(item => item.name === "Dummy");
-    if (dummyItem && dummyItem.dropdown) {
-        const solutions = dummyItem.items.find(item => item.name === "Solutions");
-        const terminals = dummyItem.items.find(item => item.name === "Terminals");
-        
-        let links = [
-            navItems.find(item => item.name === "Home"),
-            navItems.find(item => item.name === "Pricing")
-        ].filter(Boolean).map(item => ({ name: item.name, href: item.href }));
+    const productItem = navItems.find(item => item.name === "Products");
+    let links = [
+        navItems.find(item => item.name === "Home"),
+        navItems.find(item => item.name === "Pricing")
+    ].filter(Boolean).map(item => ({ name: item.name, href: item.href }));
 
+    if (productItem && productItem.dropdown) {
+        const solutions = productItem.items.find(item => item.name === "Solutions");
+        const terminals = productItem.items.find(item => item.name === "Terminals");
+        
         if (solutions && solutions.dropdown) {
             links.push(...solutions.items.map(item => ({ name: item.name, href: item.href })));
         }
         if (terminals && terminals.dropdown) {
             links.push(...terminals.items.map(item => ({ name: item.name, href: item.href })));
         }
-        return links;
     }
-    return [];
+    return links;
 };
 
 const getCompanyLinks = () => {
