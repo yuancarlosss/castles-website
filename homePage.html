@@ -115,176 +115,207 @@
 <script type="text/babel">
 
 const ContactSection = () => {
-      const [formData, setFormData] = useState({ fullName: '', email: '', company: '', mobile: '', subject: '', message: '' });
+  const [formData, setFormData] = useState({ fullName: '', email: '', company: '', mobile: '', subject: '', message: '' });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-      const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-      };
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrorMessage(''); // Clear error message on input change
+  };
 
-      const handleSubmit = async (e) => {
-        e.preventDefault();
-        const data = {
-          fullName: formData.fullName,
-          email: formData.email,
-          mobile: formData.mobile,
-          company: formData.company,
-          subject: formData.subject,
-          message: formData.message,
-          submittedAt: new Date().toISOString()
-        };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        try {
-          const response = await fetch('http://localhost:3000/api/contact', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
-          console.log('Response status:', response.status);
-          console.log('Response:', await response.text());
-          if (response.ok) {
-            console.log('Form Submitted:', data);
-            console.log('Thank you for your message! We will be in touch soon.');
-            setFormData({ fullName: '', email: '', company: '', mobile: '', subject: '', message: '' });
-            alert('Form submitted successfully!');
-          } else {
-            console.error('Error submitting form:', await response.text());
-            alert('Error submitting form. Please try again.');
-          }
-        } catch (error) {
-          console.error('Fetch error:', error);
-          alert('Error submitting form. Please try again.');
-        }
-      };
+    // Validate required fields
+    if (!formData.fullName || !formData.email || !formData.subject || !formData.message) {
+      setErrorMessage('Please fill out all required fields: Full Name, Email Address, Subject, and Message.');
+      return;
+    }
 
-      const filteredSocialLinks = [
-        {
-          icon: (
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M22.258 1H.742C.333 1 0 1.333 0 1.742v20.516C0 22.667.333 23 .742 23h21.516c.409 0 .742-.333.742-.742V1.742C23 1.333 22.667 1 22.258 1zM7.227 20.315H3.725V9.45H7.227v10.865zM5.47 7.97a1.99 1.99 0 110-3.98 1.99 1.99 0 010 3.98zM20.315 20.315h-3.502V14.88c0-1.32-.47-2.228-1.666-2.228-1.282 0-2.04.87-2.378 1.71v5.953h-3.502V9.45h3.502v1.53c.465-.795 1.503-1.928 3.14-1.928 2.296 0 4.02 1.5 4.02 4.74v6.523z"/>
-            </svg>
-          ),
-          href: "https://www.linkedin.com/company/CastlesTech"
-        },
-        {
-          icon: (
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.656 9.125 8.438 9.874V15.42H7.485V12h2.953V9.38c0-3.462 2.083-5.362 5.178-5.362 1.47 0 2.738.261 3.102.377v3.364l-1.995.001c-1.562 0-1.862.744-1.862 1.832V12h3.763l-.602 3.42h-3.161v5.474C18.344 21.125 22 16.991 22 12z"/>
-            </svg>
-          ),
-          href: "https://www.facebook.com/CastlesTech"
-        },
-        {
-          icon: (
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2.163c3.204 0 3.584.013 4.85.068 1.45.065 2.585.293 3.518.66 1.05.404 1.916 1.096 2.56 1.74.644.644 1.336 1.51 1.74 2.56.366.933.593 2.068.66 3.518.055 1.266.068 1.646.068 4.85 0 3.204-.013 3.584-.068 4.85-.065 1.45-.293 2.585-.66 3.518-.404 1.05-1.096 1.916-1.74 2.56-.644.644-1.51 1.336-2.56 1.74-.933.366-2.068.593-3.518.66-1.266.055-1.646.068-4.85.068-3.204 0-3.584-.013-4.85-.068-1.45-.065-2.585-.293-3.518-.66-1.05-.404-1.916-1.096-2.56-1.74-.644-.644-1.336-1.51-1.74-2.56-.366-.933-.593-2.068-.66-3.518-.055-1.266-.068-1.646-.068-4.85 0-3.204.013-3.584.068-4.85.065-1.45.293-2.585.66-3.518.404-1.05 1.096-1.916 1.74-2.56.644-.644 1.51-1.336 2.56-1.74.933-.366 2.068-.593 3.518-.66 1.266-.055 1.646-.068 4.85-.068zm0-2.163c-3.268 0-3.692.013-4.966.068-1.49.065-2.71.302-3.68.75-.98.467-1.785 1.272-2.252 2.252-.448.97-.685 2.19-.75 3.68-.055 1.274-.068 1.698-.068 4.966 0 3.268.013 3.692.068 4.966.065 1.49.302 2.71.75 3.68.467.98 1.272 1.785 2.252 2.252.97.448 2.19.685 3.68.75 1.274.055 1.698.068 4.966.068 3.268 0 3.692-.013 4.966-.068 1.49-.065 2.71-.302 3.68-.75.98-.467 1.785-1.272 2.252-2.252.448-.97.685-2.19.75-3.68.055-1.274.068-1.698.068-4.966 0-3.268-.013-3.692-.068-4.966-.065-1.49-.302-2.71-.75-3.68-.467-.98-1.272-1.785-2.252-2.252-.97-.448-2.19-.685-3.68-.75-1.274-.055-1.698-.068-4.966-.068zM12 17.8c-3.204 0-5.8-2.596-5.8-5.8 0-3.204 2.596-5.8 5.8-5.8 3.204 0 5.8 2.596 5.8 5.8 0 3.204-2.596 5.8-5.8 5.8zm0-9.8c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm6.4-.316c-.54 0-.97.43-.97.97s.43.97.97.97.97-.43.97-.97-.43-.97-.97-.97z"/>
-            </svg>
-          ),
-          href: "https://www.instagram.com/CastlesTech"
-        }
-      ];
+    const data = {
+      fullName: formData.fullName,
+      email: formData.email,
+      mobile: formData.mobile,
+      company: formData.company,
+      subject: formData.subject,
+      message: formData.message,
+      submittedAt: new Date().toISOString()
+    };
 
-      return (
-        <section className="bg-red-500 py-16 text-white" id="contact">
-          <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <h2 className="text-5xl font-extrabold mb-8">Get in touch</h2>
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Email</h4>
-                  <a href="mailto:hello@castlesph.com" className="text-lg font-bold hover:underline">hello@castlesph.com</a>
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Phone</h4>
-                  <a href="tel:+12553526258" className="text-lg font-bold hover:underline">(02) 8531 0708</a>
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Address</h4>
-                  <p className="text-lg font-bold">UNIT 616, CITY AND LAND MEGA PLAZA ADB AVE,<br/>CORNER Garnet Rd, Pasig, 1600 Metro Manila</p>
-                </div>
-              </div>
-              <div className="pt-6 flex space-x-4">
-                {filteredSocialLinks.map((link, index) => (
-                  <a key={index} href={link.href} className="text-white hover:text-white/80 transition-colors" target="_blank" rel="noopener noreferrer">
-                    {link.icon}
-                  </a>
-                ))}
-              </div>
+    try {
+      const response = await fetch('http://localhost:3000/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      console.log('Response status:', response.status);
+      console.log('Response:', await response.text());
+      if (response.ok) {
+        console.log('Form Submitted:', data);
+        setFormData({ fullName: '', email: '', company: '', mobile: '', subject: '', message: '' });
+        setIsModalOpen(true);
+      } else {
+        console.error('Error submitting form:', await response.text());
+        setErrorMessage('Error submitting form. Please try again.');
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setErrorMessage('Error submitting form. Please try again.');
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const filteredSocialLinks = [
+    {
+      icon: (
+        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M22.258 1H.742C.333 1 0 1.333 0 1.742v20.516C0 22.667.333 23 .742 23h21.516c.409 0 .742-.333.742-.742V1.742C23 1.333 22.667 1 22.258 1zM7.227 20.315H3.725V9.45H7.227v10.865zM5.47 7.97a1.99 1.99 0 110-3.98 1.99 1.99 0 010 3.98zM20.315 20.315h-3.502V14.88c0-1.32-.47-2.228-1.666-2.228-1.282 0-2.04.87-2.378 1.71v5.953h-3.502V9.45h3.502v1.53c.465-.795 1.503-1.928 3.14-1.928 2.296 0 4.02 1.5 4.02 4.74v6.523z"/>
+        </svg>
+      ),
+      href: "https://www.linkedin.com/company/CastlesTech"
+    },
+    {
+      icon: (
+        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.656 9.125 8.438 9.874V15.42H7.485V12h2.953V9.38c0-3.462 2.083-5.362 5.178-5.362 1.47 0 2.738.261 3.102.377v3.364l-1.995.001c-1.562 0-1.862.744-1.862 1.832V12h3.763l-.602 3.42h-3.161v5.474C18.344 21.125 22 16.991 22 12z"/>
+        </svg>
+      ),
+      href: "https://www.facebook.com/CastlesTech"
+    },
+    {
+      icon: (
+        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2.163c3.204 0 3.584.013 4.85.068 1.45.065 2.585.293 3.518.66 1.05.404 1.916 1.096 2.56 1.74.644.644 1.336 1.51 1.74 2.56.366.933.593 2.068.66 3.518.055 1.266.068 1.646.068 4.85 0 3.204-.013 3.584-.068 4.85-.065 1.45-.293 2.585-.66 3.518-.404 1.05-1.096 1.916-1.74 2.56-.644.644-1.51 1.336-2.56 1.74-.933.366-2.068.593-3.518.66-1.266.055-1.646.068-4.85.068-3.204 0-3.584-.013-4.85-.068-1.45-.065-2.585-.293-3.518-.66-1.05-.404-1.916-1.096-2.56-1.74-.644-.644-1.336-1.51-1.74-2.56-.366-.933-.593-2.068-.66-3.518-.055-1.266-.068-1.646-.068-4.85 0-3.204.013-3.584.068-4.85.065-1.45.293-2.585.66-3.518.404-1.05 1.096-1.916 1.74-2.56.644-.644 1.51-1.336 2.56-1.74.933-.366 2.068-.593 3.518-.66 1.266-.055 1.646-.068 4.85-.068zm0-2.163c-3.268 0-3.692.013-4.966.068-1.49.065-2.71.302-3.68.75-.98.467-1.785 1.272-2.252 2.252-.448.97-.685 2.19-.75 3.68-.055 1.274-.068 1.698-.068 4.966 0 3.268.013 3.692.068 4.966.065 1.49.302 2.71.75 3.68.467.98 1.272 1.785 2.252 2.252.97.448 2.19.685 3.68.75 1.274.055 1.698.068 4.966.068 3.268 0 3.692-.013 4.966-.068 1.49-.065 2.71-.302 3.68-.75.98-.467 1.785-1.272 2.252-2.252.448-.97.685-2.19.75-3.68.055-1.274.068-1.698.068-4.966 0-3.268-.013-3.692-.068-4.966-.065-1.49-.302-2.71-.75-3.68-.467-.98-1.272-1.785-2.252-2.252-.97-.448-2.19-.685-3.68-.75-1.274-.055-1.698-.068-4.966-.068zM12 17.8c-3.204 0-5.8-2.596-5.8-5.8 0-3.204 2.596-5.8 5.8-5.8 3.204 0 5.8 2.596 5.8 5.8 0 3.204-2.596 5.8-5.8 5.8zm0-9.8c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm6.4-.316c-.54 0-.97.43-.97.97s.43.97.97.97.97-.43.97-.97-.43-.97-.97-.97z"/>
+        </svg>
+      ),
+      href: "https://www.instagram.com/CastlesTech"
+    }
+  ];
+
+  return (
+    <section className="bg-red-500 py-16 text-white" id="contact">
+      <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="space-y-8">
+          <h2 className="text-5xl font-extrabold mb-8">Get in touch</h2>
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Email</h4>
+              <a href="mailto:hello@castlesph.com" className="text-lg font-bold hover:underline">hello@castlesph.com</a>
             </div>
-            <div className="bg-white p-6 sm:p-8 rounded-xl shadow-2xl text-gray-800">
-              <h3 className="text-2xl font-bold text-red-500 mb-6">Send us a message!</h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name="fullName"
-                    placeholder="Full Name (Required)"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                    required
-                    value={formData.fullName}
-                    onChange={handleChange}
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email Address (Required)"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name="company"
-                    placeholder="Company Name"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                    value={formData.company}
-                    onChange={handleChange}
-                  />
-                  <input
-                    type="tel"
-                    name="mobile"
-                    placeholder="Mobile Number"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                    value={formData.mobile}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <input
-                    type="text"
-                    name="subject"
-                    placeholder="Subject (Required)"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                    required
-                    value={formData.subject}
-                    onChange={handleChange}
-                  />
-                </div>
-                <textarea
-                  name="message"
-                  placeholder="Your Message"
-                  rows="5"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                  required
-                  value={formData.message}
-                  onChange={handleChange}
-                ></textarea>
-                <div className="text-right">
-                  <button
-                    type="submit"
-                    className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 transition-colors"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
+            <div>
+              <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Phone</h4>
+              <a href="tel:+12553526258" className="text-lg font-bold hover:underline">(02) 8531 0708</a>
+            </div>
+            <div>
+              <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Address</h4>
+              <p className="text-lg font-bold">UNIT 616, CITY AND LAND MEGA PLAZA ADB AVE,<br/>CORNER Garnet Rd, Pasig, 1600 Metro Manila</p>
             </div>
           </div>
-        </section>
-      );
-    };
+          <div className="pt-6 flex space-x-4">
+            {filteredSocialLinks.map((link, index) => (
+              <a key={index} href={link.href} className="text-white hover:text-white/80 transition-colors" target="_blank" rel="noopener noreferrer">
+                {link.icon}
+              </a>
+            ))}
+          </div>
+        </div>
+        <div className="bg-white p-6 sm:p-8 rounded-xl shadow-2xl text-gray-800">
+          <h3 className="text-2xl font-bold text-red-500 mb-6">Send us a message!</h3>
+          <div className="space-y-4">
+            {errorMessage && (
+              <div className="text-red-500 text-sm font-semibold">{errorMessage}</div>
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Full Name (Required)"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                required
+                value={formData.fullName}
+                onChange={handleChange}
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address (Required)"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                required
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="company"
+                placeholder="Company Name"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                value={formData.company}
+                onChange={handleChange}
+              />
+              <input
+                type="tel"
+                name="mobile"
+                placeholder="Mobile Number"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                value={formData.mobile}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                name="subject"
+                placeholder="Subject (Required)"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                required
+                value={formData.subject}
+                onChange={handleChange}
+              />
+            </div>
+            <textarea
+              name="message"
+              placeholder="Your Message"
+              rows="5"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+              required
+              value={formData.message}
+              onChange={handleChange}
+            ></textarea>
+            <div className="text-right">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 transition-colors"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Thank You!</h2>
+            <p className="text-gray-600 mb-6">Your message has been sent successfully. We will be in touch soon!</p>
+            <button
+              onClick={closeModal}
+              className="w-full px-4 py-2 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+};
 
     const App = () => {
         const handRef = useRef(null);
