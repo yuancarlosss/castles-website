@@ -15,8 +15,8 @@ const navItems = [
                 href: "#",
                 dropdown: true,
                 items: [
-                    { name: "Online Solutions", href: "online.html" },
-                    { name: "In-Store Solutions", href: "pos.html" }
+                    { name: "In-Store Solutions", href: "pos.html" },
+                    { name: "Online Solutions", href: "online.html" }
                 ]
             },
             {
@@ -26,14 +26,14 @@ const navItems = [
                 items: [
                     { name: "S1F2A", href: "product1.html" },
                     { name: "MINI", href: "product2.html" },
-                    { name: "SIF4", href: "product3.html" }
+                    { name: "S1F4", href: "product3.html" }
                 ]
             }
         ]
     },
     { name: "Pricing", href: "pricing.html", dropdown: false },
     { name: "About Us", href: "about.html", dropdown: false },
-    { name: "Our Team", href: "team.html", dropdown: false }
+    { name: "Helpdesk & Support", href: "support.html", dropdown: false }
 ];
 
 const socialLinks = [
@@ -46,7 +46,8 @@ const getProductLinks = () => {
     const productItem = navItems.find(item => item.name === "Products");
     let links = [
         navItems.find(item => item.name === "Home"),
-        navItems.find(item => item.name === "Pricing")
+        navItems.find(item => item.name === "Pricing"),
+        navItems.find(item => item.name === "Helpdesk & Support")
     ].filter(Boolean).map(item => ({ name: item.name, href: item.href }));
 
     if (productItem && productItem.dropdown) {
@@ -67,7 +68,7 @@ const getCompanyLinks = () => {
     return [
         { name: "About Us", href: "about.html" },
         { name: "Contact Us", href: "contacts.html" },
-        { name: "Team", href: "team.html" },
+        { name: "Helpdesk & Support", href: "support.html" },
     ];
 };
 

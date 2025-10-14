@@ -56,7 +56,6 @@
             z-index: -1;
         }
         
-        /* Removed .footer-bg class */
 
         /* Marquee animations */
         @keyframes marqueeRight {
@@ -109,617 +108,214 @@
 
 <div id="root"></div>
 
+<script type="text/babel" src="scripts/navBar.js"></script>
+<script type="text/babel" src="scripts/footer.js"></script>
+<script type="text/babel" src="scripts/testimonial.js"></script>
+
 <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
 
-    // --- Data Definitions ---
-    const navItems = [
-        { name: "Home", href: "homePage.html", dropdown: false },
-        {
-            name: "Dummy",
-            href: "#",
-            dropdown: true,
-            items: [
-                {
-                    name: "Solutions",
-                    href: "#",
-                    dropdown: true,
-                    items: [
-                        { name: "Online", href: "online.html" },
-                        { name: "QR", href: "qr.html" },
-                        { name: "POS", href: "pos.html" }
-                    ]
-                },
-                { name: "Terminals",
-                 href: "#terminals",
-                  dropdown: true,
-                  items: [
-                        {name:"S1F2A", href:"product1.html"},
-                        {name:"MINI", href:"product2.html"},
-                        {name:"SIF4", href:"product3.html"}
-                  ]
-                }
-            ]
-        },
-        { name: "Pricing", href: "pricing.html", dropdown: false },
-        { name: "About Us", href: "about.html", dropdown: false }
-    ];
+const ContactSection = () => {
+  const [formData, setFormData] = useState({ fullName: '', email: '', company: '', mobile: '', subject: '', message: '' });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-    const socialLinks = [
-        { icon: (
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M22.258 1H.742C.333 1 0 1.333 0 1.742v20.516C0 22.667.333 23 .742 23h21.516c.409 0 .742-.333.742-.742V1.742C23 1.333 22.667 1 22.258 1zM7.227 20.315H3.725V9.45H7.227v10.865zM5.47 7.97a1.99 1.99 0 110-3.98 1.99 1.99 0 010 3.98zM20.315 20.315h-3.502V14.88c0-1.32-.47-2.228-1.666-2.228-1.282 0-2.04.87-2.378 1.71v5.953h-3.502V9.45h3.502v1.53c.465-.795 1.503-1.928 3.14-1.928 2.296 0 4.02 1.5 4.02 4.74v6.523z"/>
-            </svg>
-        ), href: "#" }, // LinkedIn
-        { icon: (
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.708 3.125 8.718 7.423 9.924.54.102.738-.236.738-.523 0-.256-.01-1.05-.015-1.957-3.04.66-3.68-.807-3.68-1.564-.632-1.61-.154-2.257.478-2.613 1.096-.28 2.275.29 2.593 1.13.97 1.666 2.57 1.18 3.208.895.098-.7.378-1.18.687-1.45-2.435-.27-4.994-1.218-4.994-5.405 0-1.19.42-2.17.11-2.93-.112-.28.114-1.33.268-2.18.423-.13 1.285.04 2.53.978.8-.22 1.637-.33 2.5-.33.863 0 1.7.11 2.5.33 1.245-.938 2.107-1.108 2.53-.978.154.85.38 1.895.268 2.18.068.76.11 1.74.11 2.93 0 4.195-2.56 5.13-5.004 5.405.39.335.74.995.74 2.01 0 1.45-.014 2.62-.014 2.97 0 .287.198.625.742.523C18.875 20.718 22 16.708 22 12c0-5.523-4.477-10-10-10z" />
-            </svg>
-        ), href: "#" }, // GitHub
-        { icon: (
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M22 6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-2zm-6 0h-8c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM4 6H2c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/>
-            </svg>
-        ), href: "#" } // Dribbble/Other
-    ];
-    
-    // Links pulled from navItems for the footer, using only the top-level links for "Products" and "Company"
-    const getProductLinks = () => {
-        const dummyItem = navItems.find(item => item.name === "Dummy");
-        if (dummyItem && dummyItem.dropdown) {
-            const solutions = dummyItem.items.find(item => item.name === "Solutions");
-            const terminals = dummyItem.items.find(item => item.name === "Terminals");
-            
-            let links = [
-                navItems.find(item => item.name === "Home"),
-                navItems.find(item => item.name === "Pricing")
-            ].filter(Boolean).map(item => ({ name: item.name, href: item.href }));
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrorMessage(''); // Clear error message on input change
+  };
 
-            if (solutions && solutions.dropdown) {
-                links.push(...solutions.items.map(item => ({ name: item.name, href: item.href })));
-            }
-            if (terminals && terminals.dropdown) {
-                links.push(...terminals.items.map(item => ({ name: item.name, href: item.href })));
-            }
-            return links;
-        }
-        return [];
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate required fields
+    if (!formData.fullName || !formData.email || !formData.subject || !formData.message) {
+      setErrorMessage('Please fill out all required fields: Full Name, Email Address, Subject, and Message.');
+      return;
+    }
+
+    const data = {
+      fullName: formData.fullName,
+      email: formData.email,
+      mobile: formData.mobile,
+      company: formData.company,
+      subject: formData.subject,
+      message: formData.message,
+      submittedAt: new Date().toISOString()
     };
 
-    const getCompanyLinks = () => {
-        return [
-            { name: "About Us", href: "about.html" },
-            { name: "Contact Us", href: "contacts.html" },
-            { name: "Team", href: "#team" },
-            { name: "Careers", href: "#careers" }
-        ];
-    };
+    try {
+      const response = await fetch('http://localhost:3000/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      console.log('Response status:', response.status);
+      console.log('Response:', await response.text());
+      if (response.ok) {
+        console.log('Form Submitted:', data);
+        setFormData({ fullName: '', email: '', company: '', mobile: '', subject: '', message: '' });
+        setIsModalOpen(true);
+      } else {
+        console.error('Error submitting form:', await response.text());
+        setErrorMessage('Error submitting form. Please try again.');
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setErrorMessage('Error submitting form. Please try again.');
+    }
+  };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
-    // --- Components ---
+  const filteredSocialLinks = [
+    {
+      icon: (
+        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M22.258 1H.742C.333 1 0 1.333 0 1.742v20.516C0 22.667.333 23 .742 23h21.516c.409 0 .742-.333.742-.742V1.742C23 1.333 22.667 1 22.258 1zM7.227 20.315H3.725V9.45H7.227v10.865zM5.47 7.97a1.99 1.99 0 110-3.98 1.99 1.99 0 010 3.98zM20.315 20.315h-3.502V14.88c0-1.32-.47-2.228-1.666-2.228-1.282 0-2.04.87-2.378 1.71v5.953h-3.502V9.45h3.502v1.53c.465-.795 1.503-1.928 3.14-1.928 2.296 0 4.02 1.5 4.02 4.74v6.523z"/>
+        </svg>
+      ),
+      href: "https://www.linkedin.com/company/CastlesTech"
+    },
+    {
+      icon: (
+        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.656 9.125 8.438 9.874V15.42H7.485V12h2.953V9.38c0-3.462 2.083-5.362 5.178-5.362 1.47 0 2.738.261 3.102.377v3.364l-1.995.001c-1.562 0-1.862.744-1.862 1.832V12h3.763l-.602 3.42h-3.161v5.474C18.344 21.125 22 16.991 22 12z"/>
+        </svg>
+      ),
+      href: "https://www.facebook.com/CastlesTech"
+    },
+    {
+      icon: (
+        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2.163c3.204 0 3.584.013 4.85.068 1.45.065 2.585.293 3.518.66 1.05.404 1.916 1.096 2.56 1.74.644.644 1.336 1.51 1.74 2.56.366.933.593 2.068.66 3.518.055 1.266.068 1.646.068 4.85 0 3.204-.013 3.584-.068 4.85-.065 1.45-.293 2.585-.66 3.518-.404 1.05-1.096 1.916-1.74 2.56-.644.644-1.51 1.336-2.56 1.74-.933.366-2.068.593-3.518.66-1.266.055-1.646.068-4.85.068-3.204 0-3.584-.013-4.85-.068-1.45-.065-2.585-.293-3.518-.66-1.05-.404-1.916-1.096-2.56-1.74-.644-.644-1.336-1.51-1.74-2.56-.366-.933-.593-2.068-.66-3.518-.055-1.266-.068-1.646-.068-4.85 0-3.204.013-3.584.068-4.85.065-1.45.293-2.585.66-3.518.404-1.05 1.096-1.916 1.74-2.56.644-.644 1.51-1.336 2.56-1.74.933-.366 2.068-.593 3.518-.66 1.266-.055 1.646-.068 4.85-.068zm0-2.163c-3.268 0-3.692.013-4.966.068-1.49.065-2.71.302-3.68.75-.98.467-1.785 1.272-2.252 2.252-.448.97-.685 2.19-.75 3.68-.055 1.274-.068 1.698-.068 4.966 0 3.268.013 3.692.068 4.966.065 1.49.302 2.71.75 3.68.467.98 1.272 1.785 2.252 2.252.97.448 2.19.685 3.68.75 1.274.055 1.698.068 4.966.068 3.268 0 3.692-.013 4.966-.068 1.49-.065 2.71-.302 3.68-.75.98-.467 1.785-1.272 2.252-2.252.448-.97.685-2.19.75-3.68.055-1.274.068-1.698.068-4.966 0-3.268-.013-3.692-.068-4.966-.065-1.49-.302-2.71-.75-3.68-.467-.98-1.272-1.785-2.252-2.252-.97-.448-2.19-.685-3.68-.75-1.274-.055-1.698-.068-4.966-.068zM12 17.8c-3.204 0-5.8-2.596-5.8-5.8 0-3.204 2.596-5.8 5.8-5.8 3.204 0 5.8 2.596 5.8 5.8 0 3.204-2.596 5.8-5.8 5.8zm0-9.8c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm6.4-.316c-.54 0-.97.43-.97.97s.43.97.97.97.97-.43.97-.97-.43-.97-.97-.97z"/>
+        </svg>
+      ),
+      href: "https://www.instagram.com/CastlesTech"
+    }
+  ];
 
-    const NestedDropdownItem = ({ item, isShrunk }) => {
-        const [isOpen, setIsOpen] = useState(false);
-        const timeoutRef = useRef(null);
-
-        const navItemClasses = "block px-4 py-2 rounded-lg text-sm hover:bg-red-500 hover:text-white transition-colors duration-200";
-
-        const handleMouseEnter = () => {
-            clearTimeout(timeoutRef.current);
-            setIsOpen(true);
-        };
-
-        const handleMouseLeave = () => {
-            timeoutRef.current = setTimeout(() => {
-                setIsOpen(false);
-            }, 300); // 300ms delay
-        };
-
-        if (item.dropdown) {
-            return (
-                <div
-                    className="relative"
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                >
-                    <a href={item.href} className={`${navItemClasses} flex items-center justify-between`}>
-                        <span>{item.name}</span>
-                        <svg className={`h-3 w-3 ml-2 transform transition-transform duration-200 ${isOpen ? 'rotate-90' : 'rotate-0'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                    </a>
-                    <div className={`absolute top-0 left-full mt-0 w-48 bg-white text-gray-800 rounded-lg shadow-lg z-50 transition-all duration-300 transform origin-left
-                        ${isOpen ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}`}
-                        style={{ marginLeft: '0.5rem' }}>
-                        {item.items.map((subItem, index) => (
-                            <a key={index} href={subItem.href} className="block px-4 py-2 text-sm hover:bg-red-500 hover:text-white transition-colors duration-200">
-                                {subItem.name}
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            );
-        }
-
-        return (
-            <a href={item.href} className={navItemClasses}>
-                {item.name}
-            </a>
-        );
-    };
-
-    const DropdownItem = ({ name, items, href, isShrunk }) => {
-        const [isOpen, setIsOpen] = useState(false);
-        const timeoutRef = useRef(null);
-        
-        const navItemClasses = isShrunk
-            ? "p-2 font-medium text-xs rounded-md hover:bg-white/20 transition-colors duration-200"
-            : "p-2 font-medium text-xs rounded-md hover:bg-red-500 hover:text-white transition-colors duration-200";
-
-        const handleMouseEnter = () => {
-            clearTimeout(timeoutRef.current);
-            setIsOpen(true);
-        };
-
-        const handleMouseLeave = () => {
-            timeoutRef.current = setTimeout(() => {
-                setIsOpen(false);
-            }, 300); // 300ms delay
-        };
-
-        return (
-            <div
-                className="relative"
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            >
-                <a
-                    href={href}
-                    className={`${navItemClasses} flex items-center space-x-1 p-2`}
-                >
-                    <span>{name}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        className={`h-3 w-3 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                </a>
-
-                <div className={`absolute top-full left-0 pt-2 w-48 bg-white text-gray-800 rounded-lg shadow-lg z-50 transition-all duration-300 transform origin-top
-                    ${isOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'}`}>
-                    {items.map((sub, index) => (
-                        <NestedDropdownItem key={index} item={sub} isShrunk={isShrunk} />
-                    ))}
-                </div>
+  return (
+    <section className="bg-red-500 py-16 text-white" id="contact">
+      <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="space-y-8">
+          <h2 className="text-5xl font-extrabold mb-8">Get in touch</h2>
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Email</h4>
+              <a href="mailto:hello@castlesph.com" className="text-lg font-bold hover:underline">hello@castlesph.com</a>
             </div>
-        );
-    };
-
-    const Navbar = () => {
-        const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-        const [isShrunk, setIsShrunk] = useState(false);
-
-        useEffect(() => {
-            const handleScroll = () => {
-                const shrinkThreshold = 50;
-                const isScrolled = window.scrollY > shrinkThreshold;
-                setIsShrunk(isScrolled);
-            };
-
-            window.addEventListener('scroll', handleScroll);
-
-            return () => {
-                window.removeEventListener('scroll', handleScroll);
-            };
-        }, []);
-
-        const navbarClasses = `
-            fixed top-0 left-0 w-full z-50 shadow-lg
-            transition-[padding,background-color,color] duration-300 ease-in-out
-            ${isShrunk ? 'bg-red-500 text-white py-2 lg:py-4' : 'bg-white text-gray-800 py-4 lg:py-6'}
-        `;
-
-        const navItemClasses = isShrunk
-            ? "p-2 font-medium text-xs rounded-md hover:bg-white/20 transition-colors duration-200"
-            : "p-2 font-medium text-xs rounded-md hover:bg-red-500 hover:text-white transition-colors duration-200";
-
-        const logoClasses = `
-            transition-[height,width] duration-300 ease-in-out
-            ${isShrunk ? 'h-8 sm:h-10' : 'h-10 sm:h-12'}
-        `;
-
-        const contactButtonClasses = `
-            font-bold py-2 px-4 rounded-full transition-all duration-300 ease-in-out
-            ${isShrunk 
-                ? 'bg-white text-red-500 hover:bg-gray-200' 
-                : 'bg-red-500 text-white hover:bg-red-600'
-            }
-        `;
-
-        return (
-            <nav className={navbarClasses}>
-                <div className="container mx-auto flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                        <img
-                            src={isShrunk ? "resources/castlesalt.png" : "resources/logocastles.png"}
-                            onError="this.onerror=null;this.src='https://placehold.co/100x40/ffffff/000000?text=Logo';"
-                            alt="Castles Logo"
-                            className={logoClasses}
-                        />
-                    </div>
-
-                    <div className="hidden lg:flex flex-1 justify-center items-center space-x-8">
-                        {navItems.map((item, index) =>
-                            item.dropdown ? (
-                                <DropdownItem key={index} name={item.name} items={item.items} href={item.href} isShrunk={isShrunk} />
-                            ) : (
-                                <a
-                                    key={index}
-                                    href={item.href || "#"}
-                                    className={navItemClasses}
-                                >
-                                    {item.name}
-                                </a>
-                            )
-                        )}
-                    </div>
-
-                    <div className="flex items-center space-x-4">
-                        <div className="hidden lg:flex items-center">
-                            <a href="contacts.html" className={contactButtonClasses}>
-                                Contact Us
-                            </a>
-                        </div>
-                        <div className="lg:hidden">
-                            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-gray-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {isMobileMenuOpen && (
-                    <div className="lg:hidden mt-4 space-y-2">
-                        <a href="contacts.html" className="block p-2 font-bold rounded-md text-sm text-center bg-red-500 text-white hover:bg-red-600 transition-colors">
-                            Contact Us
-                        </a>
-                        {navItems.map((item, index) => (
-                            item.dropdown ? (
-                                <DropdownItem key={index} name={item.name} items={item.items} isShrunk={isShrunk} />
-                            ) : (
-                                <a key={index} href={item.href || "#"} className="block p-2 text-gray-800 font-medium rounded-md hover:bg-gray-100 transition-colors duration-200 text-sm">
-                                    {item.name}
-                                </a>
-                            )
-                        ))}
-                    </div>
-                )}
-            </nav>
-        );
-    };
-
-    
-
-    const TestimonialsSection = () => {
-        const carouselRef = useRef(null);
-        const [currentIndex, setCurrentIndex] = useState(0);
-        const [cardsViewable, setCardsViewable] = useState(3); // default to 3
-
-        const testimonials = [
-            { text: "The seamless integration with our existing system made the transition effortless. Our checkout process is faster than ever.", name: "Allan Collins", title: "Store Owner", initial: "A.C" },
-            { text: "I was worried about the learning curve, but the system is so intuitive. My staff learned it in an afternoon.", name: "Clay Washington", title: "Restaurant Manager", initial: "C.W" },
-            { text: "The detailed analytics have been a game-changer. I can make informed decisions and optimize our sales more effectively.", name: "Tanya Grant", title: "Retail Entrepreneur", initial: "T.G" },
-            { text: "The customer support is top-notch. Any question I have is answered promptly, ensuring our business never misses a beat.", name: "John Smith", title: "Small Business Owner", initial: "J.S" },
-            { text: "The hardware is durable, and the software is incredibly reliable. I no longer worry about system crashes during peak hours.", name: "Sarah Kim", title: "Cafe Manager", initial: "S.K" },
-            { text: "This POS system has transformed our inventory management. We can now track stock in real-time and prevent shortages.", name: "Michael Lee", title: "Boutique Owner", initial: "M.L" }
-        ];
-
-        const getCardsPerPage = () => {
-            if (window.innerWidth >= 1024) return 3; // Desktop
-            if (window.innerWidth >= 768) return 2;  // Tablet
-            return 1; // Mobile
-        };
-
-        useEffect(() => {
-            const updateCardsViewable = () => setCardsViewable(getCardsPerPage());
-            updateCardsViewable();
-            window.addEventListener("resize", updateCardsViewable);
-            return () => window.removeEventListener("resize", updateCardsViewable);
-        }, []);
-
-        // Calculate translation for sliding
-        const transformValue = -(100 / cardsViewable) * currentIndex;
-
-        const handleNext = () => {
-            if (currentIndex < testimonials.length - cardsViewable) {
-                setCurrentIndex((prev) => prev + 1);
-            }
-        };
-
-        const handlePrevious = () => {
-            if (currentIndex > 0) {
-                setCurrentIndex((prev) => prev - 1);
-            }
-        };
-
-        const cardStyle = {
-            flex: `0 0 ${100 / cardsViewable}%`, // enforce card width based on visible count
-            maxWidth: `${100 / cardsViewable}%`,
-        };
-
-        return (
-            <section className="py-8 bg-gray-100">
-                <div className="container mx-auto px-4">
-                    <div className="text-center mb-6">
-                        <h3 className="text-sm text-gray-500 font-semibold mb-1 tracking-wide uppercase">
-                            SUCCESS STORIES
-                        </h3>
-                        <h2 className="text-4xl sm:text-5xl font-bold text-red-500 leading-tight">
-                            What our clients say about us.
-                        </h2>
-                    </div>
-
-                    <div className="testimonial-carousel-wrapper relative overflow-hidden">
-                        <div
-                            ref={carouselRef}
-                            className="flex transition-transform duration-500 ease-in-out gap-3"
-                            style={{
-                                transform: `translateX(${transformValue}%)`,
-                            }}
-                        >
-                            {testimonials.map((testimonial, index) => (
-                                <div key={index} style={cardStyle}>
-                                    <div className="bg-white p-3 rounded-xl shadow-lg border border-gray-100 h-full flex flex-col items-center text-center relative">
-                                        <div className="absolute top-0 left-0 mt-3 ml-3 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="20"
-                                                height="20"
-                                                fill="none"
-                                                stroke="white"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            >
-                                                <path d="M10 13c-4.418 0-8-3.582-8-8s3.582-8 8-8v16zM22 13c-4.418 0-8-3.582-8-8s3.582-8 8-8v16z"></path>
-                                            </svg>
-                                        </div>
-                                        <p className="text-xs text-gray-600 my-4 flex-grow pt-6 px-1">
-                                            "{testimonial.text}"
-                                        </p>
-                                        <div className="flex flex-col items-center mt-1">
-                                            <img
-                                                src={`https://placehold.co/100x100/E5E7EB/4B5563?text=${testimonial.initial}`}
-                                                alt="Client Testimonial"
-                                                className="w-10 h-10 rounded-full mb-1 object-cover"
-                                            />
-                                            <p className="font-bold text-gray-800 text-xs">
-                                                {testimonial.name}
-                                            </p>
-                                            <p className="text-xs text-red-500 mt-0">
-                                                {testimonial.title}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="mt-3 flex justify-center space-x-3">
-                            <button
-                                onClick={handlePrevious}
-                                disabled={currentIndex === 0}
-                                className={`bg-gray-200 text-gray-700 font-bold py-1 px-3 rounded-full shadow-lg transition-colors text-sm ${
-                                    currentIndex === 0
-                                        ? "opacity-50 cursor-not-allowed"
-                                        : "hover:bg-gray-300"
-                                }`}
-                            >
-                                Previous
-                            </button>
-                            <button
-                                onClick={handleNext}
-                                disabled={currentIndex >= testimonials.length - cardsViewable}
-                                className={`bg-red-500 text-white font-bold py-1 px-3 rounded-full shadow-lg transition-colors text-sm ${
-                                    currentIndex >= testimonials.length - cardsViewable
-                                        ? "opacity-50 cursor-not-allowed"
-                                        : "hover:bg-red-600"
-                                }`}
-                            >
-                                Next
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-    };
-
-    const ContactSection = () => {
-        const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-
-        const handleChange = (e) => {
-            setFormData({ ...formData, [e.target.name]: e.target.value });
-        };
-
-        const handleSubmit = (e) => {
-            e.preventDefault();
-            // In a real app, you would handle form submission here (e.g., sending an API request).
-            console.log('Form Submitted:', formData);
-            // Replaced alert with console log/visual feedback
-            console.log('Thank you for your message! We will be in touch soon.'); 
-            setFormData({ name: '', email: '', message: '' });
-        };
-
-        return (
-            // Changed text-white to text-gray-800 for contrast against the upcoming white footer
-            <section className="bg-red-500 py-16 text-white" id="contact">
-                <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    {/* Left Column: Contact Details */}
-                    <div className="space-y-8">
-                        <h2 className="text-4xl font-extrabold mb-8">
-                            Get in touch
-                        </h2>
-                        
-                        <div className="space-y-6">
-                            {/* Email */}
-                            <div>
-                                <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Email</h4>
-                                <a href="mailto:hello@castlesph.com" className="text-xl font-medium hover:underline">
-                                    hello@castlesph.com
-                                </a>
-                            </div>
-
-                            {/* Phone */}
-                            <div>
-                                <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Phone</h4>
-                                <a href="tel:+12553526258" className="text-xl font-medium hover:underline">
-                                    +1 (255) 352-6258
-                                </a>
-                            </div>
-
-                            {/* Address */}
-                            <div>
-                                <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Address</h4>
-                                <p className="text-xl font-medium">
-                                    1234 Technology St. #1000<br/>San Francisco, CA 94220
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Social Links */}
-                        <div className="pt-6 flex space-x-4">
-                            {socialLinks.map((link, index) => (
-                                <a key={index} href={link.href} className="text-white hover:text-white/80 transition-colors">
-                                    {link.icon}
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Right Column: Contact Form */}
-                    <div className="bg-white p-6 sm:p-8 rounded-xl shadow-2xl text-gray-800">
-                        <h3 className="text-2xl font-bold text-red-500 mb-6">
-                            Send us a message!
-                        </h3>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <input
-                                    type="text"
-                                    name="name"
-                                    placeholder="Name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                                    required
-                                />
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="Email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                                    required
-                                />
-                            </div>
-                            <textarea
-                                name="message"
-                                placeholder="Your Message"
-                                value={formData.message}
-                                onChange={handleChange}
-                                rows="5"
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                                required
-                            ></textarea>
-                            <div className="text-right">
-                                <button
-                                    type="submit"
-                                    className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 transition-colors"
-                                >
-                                    Submit
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
-        );
-    };
-
-
-    const Footer = () => {
-        // Use dynamically generated links based on existing site structure
-        const productLinks = getProductLinks();
-        const companyLinks = getCompanyLinks();
-
-        // Footer color setup: white background, dark text
-        return (
-            <footer className="bg-white text-gray-800 pt-10 pb-4 shadow-inner border-t border-gray-100">
-                <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 border-b border-gray-200 pb-8">
-                        
-                        {/* Column 1: Product/Navigation Links */}
-                        <div className="space-y-4">
-                            <p className="font-bold uppercase text-xs tracking-widest text-red-500">Products & Pages</p>
-                            <ul className="space-y-2 text-sm">
-                                {productLinks.map((link, index) => (
-                                    <li key={index}>
-                                        <a href={link.href} className="hover:text-red-500 transition-colors">
-                                            {link.name}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        {/* Column 2: Company Links */}
-                        <div className="space-y-4">
-                            <p className="font-bold uppercase text-xs tracking-widest text-red-500">Company</p>
-                            <ul className="space-y-2 text-sm">
-                                {companyLinks.map((link, index) => (
-                                    <li key={index}>
-                                        <a href={link.href} className="hover:text-red-500 transition-colors">
-                                            {link.name}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        {/* Column 3: Contact Info Summary */}
-                        <div className="space-y-4 col-span-1 lg:col-span-2">
-                            <p className="text-2xl font-bold mb-4 text-gray-800">
-                                Subscribe to our newsletter
-                            </p>
-                            <form className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-                                <input
-                                    type="email"
-                                    placeholder="Email Address"
-                                    className="flex-grow p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-red-500 text-gray-800"
-                                />
-                                <button
-                                    type="submit"
-                                    className="bg-red-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600 transition-colors"
-                                >
-                                    Get a free quote
-                                </button>
-                            </form>
-                        </div>
-
-                    </div>
-
-                    {/* Copyright Section */}
-                    <div className="mt-8 text-center text-xs text-gray-500">
-                        Copyright © 2025 Castles Technology. All rights reserved.
-                    </div>
-                </div>
-            </footer>
-        );
-    };
-
+            <div>
+              <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Phone</h4>
+              <a href="tel:+12553526258" className="text-lg font-bold hover:underline">(02) 8531 0708</a>
+            </div>
+            <div>
+              <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Address</h4>
+              <p className="text-lg font-bold">UNIT 616, CITY AND LAND MEGA PLAZA ADB AVE,<br/>CORNER Garnet Rd, Pasig, 1600 Metro Manila</p>
+            </div>
+          </div>
+          <div className="pt-6 flex space-x-4">
+            {filteredSocialLinks.map((link, index) => (
+              <a key={index} href={link.href} className="text-white hover:text-white/80 transition-colors" target="_blank" rel="noopener noreferrer">
+                {link.icon}
+              </a>
+            ))}
+          </div>
+        </div>
+        <div className="bg-white p-6 sm:p-8 rounded-xl shadow-2xl text-gray-800">
+          <h3 className="text-2xl font-bold text-red-500 mb-6">Send us a message!</h3>
+          <div className="space-y-4">
+            {errorMessage && (
+              <div className="text-red-500 text-sm font-semibold">{errorMessage}</div>
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Full Name (Required)"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                required
+                value={formData.fullName}
+                onChange={handleChange}
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address (Required)"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                required
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="company"
+                placeholder="Company Name"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                value={formData.company}
+                onChange={handleChange}
+              />
+              <input
+                type="tel"
+                name="mobile"
+                placeholder="Mobile Number"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                value={formData.mobile}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                name="subject"
+                placeholder="Subject (Required)"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                required
+                value={formData.subject}
+                onChange={handleChange}
+              />
+            </div>
+            <textarea
+              name="message"
+              placeholder="Your Message"
+              rows="5"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+              required
+              value={formData.message}
+              onChange={handleChange}
+            ></textarea>
+            <div className="text-right">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 transition-colors"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Thank You!</h2>
+            <p className="text-gray-600 mb-6">Your message has been sent successfully. We will be in touch soon!</p>
+            <button
+              onClick={closeModal}
+              className="w-full px-4 py-2 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+};
 
     const App = () => {
         const handRef = useRef(null);
@@ -832,22 +428,19 @@
                             <div className="space-y-8">
                                 <div className="overflow-hidden">
                                     <div className="marquee marquee-right flex space-x-12">
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
+                                        <img src="resources/visa.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                                        <img src="resources/mtr.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                                        <img src="resources/banc.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                                        <img src="resources/jcb.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                                        <img src="resources/union.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
                                     </div>
                                 </div>
                                 <div className="overflow-hidden">
                                     <div className="marquee marquee-left flex space-x-12">
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
-                                        <img src="resources/logo_metrob.png" alt="Logo" className="h-16 w-auto" />
+                                        <img src="resources/american.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                                        <img src="resources/alipay.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" /> 
+                                        <img src="resources/logo_metrob.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />
+                                        <img src="resources/wechat.png" alt="Payment Partner Logo" className="h-16 w-auto flex-shrink-0" />  
                                     </div>
                                 </div>
                             </div>
@@ -918,12 +511,8 @@
                     </div>
                 </section>
 
-
-                
                 <TestimonialsSection />
-
                 <ContactSection />
-
                 <Footer />
             </React.Fragment>
         );

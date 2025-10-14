@@ -66,7 +66,22 @@
   <script type="text/babel" src="scripts/navBar.js"></script>
   <script type="text/babel" src="scripts/footer.js"></script>
   <script type="text/babel">
-    
+    // Reusable HeroImageContainer component to ensure consistent image sizing
+    const HeroImageContainer = ({ src, alt, fallbackSrc = 'resources/pos3.png' }) => (
+      <div className="w-full lg:w-1/2 flex justify-center">
+        <img
+          src={src}
+          alt={alt}
+          className="w-full sm:w-[120%] h-full max-w-none object-contain z-10 drop-shadow-2xl aspect-[3/2]"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = fallbackSrc;
+            e.target.className = "w-full sm:w-[120%] h-full max-w-none object-contain z-10 drop-shadow-2xl aspect-[3/2] flex items-center justify-center";
+          }}
+        />
+      </div>
+    );
+
     const Hero = () => (
       // Main container with a light background for high contrast. Added pt-28 for fixed Navbar.
       <section className="relative overflow-hidden bg-gray-50 min-h-[500px] py-16 pt-28">
@@ -97,7 +112,7 @@
                 </span>
               </h1>
               <p className="text-lg text-gray-600 max-w-lg mx-auto lg:mx-0 pt-4">
-                The S1F2A Terminal offers unparalleled speed and security for all your transactions. Elevate your point-of-sale experience with next-generation processing power.
+                The S1MINI Terminal offers unparalleled speed and security for all your transactions. Elevate your point-of-sale experience with next-generation processing power.
               </p>
               
               <div className="pt-6 flex flex-col sm:flex-row justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4">
@@ -112,157 +127,146 @@
               </div>
             </div>
 
-            {/* RIGHT SIDE: Product Image Mockup Container (Simplified, no rotation/hover effects) */}
-            <div className="w-full lg:w-1/2 flex justify-center p-4">
-               {/* Image Placeholder of the Terminal (now centered without absolute positioning) */}
-               <img 
-                  src="resources/s1f2a-terminal-mockup.png" 
-                  alt="S1F2A Payment Terminal" 
-                  className="w-4/5 h-4/5 object-contain z-10 drop-shadow-2xl"
-                  // Fallback to a styled placeholder text if the resource image fails
-                  onError={(e) => { 
-                    e.target.onerror = null; 
-                    e.target.src='resources/product2.png'; 
-                    // Removed fallback border color (border-2 border-red-600)
-                    e.target.className = "w-4/5 h-4/5 z-10 drop-shadow-2xl flex items-center justify-center";
-                  }}
-                />
-            </div>
+            {/* RIGHT SIDE: Product Image Mockup Container */}
+            <HeroImageContainer
+              src="resources/s1f2a-terminal-mockup.png"
+              alt="S1MINI Payment Terminal"
+              fallbackSrc="resources/pos3.png"
+            />
           </div>
         </div>
       </section>
     );
 
     const FeatureBanner = () => {
-        const features = [
-            {
-                title: "PCI Compliant",
-                subtitle: "Level 1 Certified Security",
-                icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-2 4h4m6-4H6a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2z" />
-                    </svg>
-                )
-            },
-            {
-                title: "Instant Setup",
-                subtitle: "Plug & Play Integration",
-                icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                )
-            },
-            {
-                title: "24/7 Monitoring",
-                subtitle: "Dedicated Transaction Support",
-                icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                )
-            }
-        ];
+      const features = [
+        {
+          title: "PCI Compliant",
+          subtitle: "Level 1 Certified Security",
+          icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-2 4h4m6-4H6a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2z" />
+            </svg>
+          )
+        },
+        {
+          title: "Instant Setup",
+          subtitle: "Plug & Play Integration",
+          icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          )
+        },
+        {
+          title: "24/7 Monitoring",
+          subtitle: "Dedicated Transaction Support",
+          icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          )
+        }
+      ];
 
-        return (
-            <section className="bg-gray-900 py-4">
-                <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white text-center">
-                        {features.map((feature, index) => (
-                            <div key={index} className="flex flex-col items-center p-2">
-                                <div className="p-2 mb-2 bg-red-500 rounded-full shadow-lg">
-                                    {feature.icon}
-                                </div>
-                                <h3 className="text-base font-bold uppercase tracking-wider">
-                                    {feature.title}
-                                </h3>
-                                <p className="text-xs text-gray-400">
-                                    {feature.subtitle}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
+      return (
+        <section className="bg-gray-900 py-4">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-white text-center">
+              {features.map((feature, index) => (
+                <div key={index} className="flex flex-col items-center p-2">
+                  <div className="p-2 mb-2 bg-red-500 rounded-full shadow-lg">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-base font-bold uppercase tracking-wider">
+                    {feature.title}
+                  </h3>
+                  <p className="text-xs text-gray-400">
+                    {feature.subtitle}
+                  </p>
                 </div>
-            </section>
-        );
+              ))}
+            </div>
+          </div>
+        </section>
+      );
     };
-    
+
     const TerminalModels = () => {
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+      const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
 
-    const modelData = {
+      const modelData = {
         description:
-        "Our flagship terminal, offering a sleek design with all-in-one functionality for a premium customer experience.",
+          "Our flagship terminal, offering a sleek design with all-in-one functionality for a premium customer experience.",
         images: [
-        "resources/front.png",
-        "resources/back.png",
-        "resources/front.png",
+          "resources/front.png",
+          "resources/back.png",
+          "resources/front.png",
         ],
-    };
+      };
 
-    const handleDotClick = (index) => {
+      const handleDotClick = (index) => {
         setCurrentImageIndex(index);
-    };
+      };
 
-    return (
-        <section className="py-20 bg-gray-100">
-        <div className="container mx-auto px-6 max-w-7xl">
+      return (
+        <section className="py-20 bg-gray-100 min-h-[500px]">
+          <div className="container mx-auto px-6 max-w-7xl">
             {/* Updated text */}
             <p className="text-sm font-bold text-gray-400 uppercase text-center mb-2">
-            S1F2A Terminal
+              S1F2A Terminal
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold text-red-500 text-center mb-12">
-            Sleek, Reliable, and Built for Performance
+              Sleek, Reliable, and Built for Performance
             </h2>
 
             <div className="animate-fade-in-up text-center">
-            <div className="relative mx-auto w-full overflow-hidden">
+              <div className="relative mx-auto w-full lg:w-1/2 flex justify-center overflow-hidden">
                 <div
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
                 >
-                {modelData.images.map((imgSrc, index) => (
-                    <img
-                    key={index}
-                    src={imgSrc}
-                    alt={`S1F2A - Part ${index + 1}`}
-                    className="w-full flex-shrink-0"
+                  {modelData.images.map((imgSrc, index) => (
+                    <HeroImageContainer
+                      key={index}
+                      src={imgSrc}
+                      alt={`S1F2A - Part ${index + 1}`}
+                      fallbackSrc="resources/pos3.png"
                     />
-                ))}
+                  ))}
                 </div>
-            </div>
+              </div>
 
-            {/* Dots for slideshow */}
-            <div className="flex justify-center space-x-2 mb-4 mt-4">
+              {/* Dots for slideshow */}
+              <div className="flex justify-center space-x-2 mb-4 mt-4">
                 {modelData.images.map((_, index) => (
-                <button
+                  <button
                     key={index}
                     onClick={() => handleDotClick(index)}
                     className={`w-3 h-3 rounded-full transition-colors duration-200
-                    ${
+                      ${
                         currentImageIndex === index
-                        ? "bg-red-500"
-                        : "bg-gray-400 hover:bg-gray-500"
-                    }`}
+                          ? "bg-red-500"
+                          : "bg-gray-400 hover:bg-gray-500"
+                      }`}
                     aria-label={`Show image ${index + 1}`}
-                />
+                  />
                 ))}
-            </div>
+              </div>
 
-            {/* Specs download button */}
-            <a
+              {/* Specs download button */}
+              <a
                 href="#"
                 className="bg-red-500 text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-red-600 transition-colors duration-300"
-            >
+              >
                 Download Full Specs
-            </a>
+              </a>
             </div>
-        </div>
+          </div>
         </section>
-    );
+      );
     };
 
-    
     const App = () => (
       <>
         <Navbar />

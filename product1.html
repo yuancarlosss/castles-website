@@ -113,18 +113,20 @@
             </div>
 
             {/* RIGHT SIDE: Product Image Mockup Container (Simplified, no rotation/hover effects) */}
-            <div className="w-full lg:w-1/2 flex justify-center p-4">
+            {/* Removed p-4 to give more space for the image */}
+            <div className="w-full lg:w-1/2 flex justify-center">
                {/* Image Placeholder of the Terminal (now centered without absolute positioning) */}
                <img 
                   src="resources/s1f2a-terminal-mockup.png" 
                   alt="S1F2A Payment Terminal" 
-                  className="w-4/5 h-4/5 object-contain z-10 drop-shadow-2xl"
+                  // Increased width to 120% and added max-w-none to let it exceed the container size
+                  className="w-[120%] h-full max-w-none object-contain z-10 drop-shadow-2xl"
                   // Fallback to a styled placeholder text if the resource image fails
                   onError={(e) => { 
                     e.target.onerror = null; 
-                    e.target.src='resources/pos.png'; 
-                    // Removed fallback border color (border-2 border-red-600)
-                    e.target.className = "w-4/5 h-4/5 z-10 drop-shadow-2xl flex items-center justify-center";
+                    e.target.src='resources/pos2.png'; 
+                    // Applied the new size classes to the fallback as well
+                    e.target.className = "w-[120%] h-full max-w-none z-10 drop-shadow-2xl flex items-center justify-center";
                   }}
                 />
             </div>
