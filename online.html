@@ -91,102 +91,100 @@
   <script type="text/babel" src="scripts/footer.js"></script>
   <script type="text/babel">
     
-   const Hero = () => (
-  // Main container: min-h reduced to 500px, py-16 retained, pt-28 retained.
-  <section className="relative overflow-hidden bg-white min-h-[500px] py-16 pt-28">
+    const Hero = () => (
+    // Main container: min-h reduced to 500px, py-16 retained, pt-28 retained.
+    // ADDED: Background image classes
+    <section className="relative overflow-hidden bg-white min-h-[500px] py-16 pt-28
+                        bg-[url('resources/herobg.png')] bg-cover bg-center bg-no-repeat">
+      {/* Content Wrapper (max width and centered) */}
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
 
-    {/* Decorative background shape: Sizing reduced to match the new, smaller scale */}
-    <div className="absolute top-0 right-0 w-2/5 h-full bg-red-50/50 rounded-bl-[150px] hidden lg:block"></div>
+          {/* LEFT SIDE: Solution Headline and Call to Action */}
+          <div className="w-full lg:w-1/2 space-y-4 text-center lg:text-left p-4">
+            <p className="text-sm font-bold uppercase tracking-widest text-black">
+              SECURE DIGITAL TRANSACTIONS
+            </p>
 
-    {/* Content Wrapper (max width and centered) */}
-    <div className="container mx-auto px-4 relative z-10">
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-8"> {/* Reduced gap from 12 to 8 */}
-
-        {/* LEFT SIDE: Solution Headline and Call to Action */}
-        <div className="w-full lg:w-1/2 space-y-4 text-center lg:text-left p-4"> {/* Reduced space-y from 6 to 4 */}
-          <p className="text-sm font-bold uppercase tracking-widest text-red-600"> {/* Reduced text size */}
-            Secure Digital Transactions
-          </p>
-
-          {/* Solution Name: Font sizes significantly reduced (e.g., 6xl -> 5xl) */}
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-gray-900 leading-tight">
-            ONLINE
-            <span className="block text-4xl sm:text-5xl lg:text-6xl font-extrabold text-red-600 mt-1"> {/* Reduced text size and margin top */}
-            SOLUTIONS
-            </span>
-          </h1>
+            {/* Solution Name: Font sizes significantly reduced (e.g., 6xl -> 5xl) */}
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-tight">
+              ONLINE
+              <span className="block text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black mt-1">
+                SOLUTIONS
+              </span>
+            </h1>
 
             {/* Alternative Tools - Highlighted as 'No Extra Cost' */}
-          <div className="pt-3">
-            <h3 className="text-base font-bold text-gray-800 mb-2 uppercase tracking-wider">
-              Multiple Payment Types Supported:
-            </h3>
-            <div className="space-y-2"> {/* Changed from flex/gap to space-y for list appearance */}
-              <div className="flex items-center">
-                <svg className="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span className="text-gray-700 font-medium">
-                  Straight Payments
-                </span>
+            <div className="pt-3">
+              <h3 className="text-base font-bold text-white mb-2 uppercase tracking-wider">
+                MULTIPLE PAYMENT TYPES SUPPORTED:
+              </h3>
+              <div className="space-y-2">
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span className="text-white font-medium">
+                    Straight Payments
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span className="text-white font-medium">
+                    Recurring / Tokenization
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span className="text-white font-medium">
+                    Pre-Auth & Capture
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center">
-                <svg className="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span className="text-gray-700 font-medium">
-                  Recurring / Tokenization
+            </div>
+            
+            {/* Alternative Tools - Highlighted as 'No Extra Cost' */}
+            <div className="pt-3">
+              <h3 className="text-base font-bold text-white mb-2 uppercase tracking-wider">
+                ALTERNATIVE TOOLS AT NO EXTRA COST:
+              </h3>
+              <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+                <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full shadow-sm">
+                  Payment Links
                 </span>
-              </div>
-              <div className="flex items-center">
-                <svg className="w-5 h-5 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span className="text-gray-700 font-medium">
-                  Pre-Auth & Capture
+                <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full shadow-sm">
+                  Static QR Integration
+                </span>
+                <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full shadow-sm">
+                  Mini-Shopping Cart
                 </span>
               </div>
             </div>
-          </div>
-          
-          {/* Alternative Tools - Highlighted as 'No Extra Cost' */}
-          <div className="pt-3"> {/* Reduced padding top from 4 to 3 */}
-            <h3 className="text-base font-bold text-gray-800 mb-2 uppercase tracking-wider"> {/* Reduced text size */}
-              Alternative Tools at No Extra Cost:
-            </h3>
-            <div className="flex flex-wrap gap-2 justify-center lg:justify-start"> {/* Reduced gap */}
-              <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full shadow-sm"> {/* Reduced pill size */}
-                Payment Links
-              </span>
-              <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full shadow-sm">
-                Static QR Integration
-              </span>
-              <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full shadow-sm">
-                Mini-Shopping Cart
-              </span>
+
+            <div className="pt-6 flex justify-center lg:justify-start">
+              {/* Primary Button: Changed to "Get in Touch" with white background */}
+              <button className="px-8 py-3 text-lg font-bold rounded-full shadow-xl transition duration-300 ease-in-out bg-white hover:bg-gray-200 text-red-600 transform hover:scale-[1.05] focus:outline-none focus:ring-4 focus:ring-red-300">
+                Get in Touch
+              </button>
             </div>
           </div>
 
-          <div className="pt-6 flex justify-center lg:justify-start"> {/* Reduced padding top from 8 to 6 */}
-            {/* Primary Button: Reduced size (xl text, p-10/4) to (lg text, p-8/3) */}
-            <button className="px-8 py-3 text-lg font-bold rounded-full shadow-xl transition duration-300 ease-in-out bg-red-600 hover:bg-red-700 text-white transform hover:scale-[1.05] focus:outline-none focus:ring-4 focus:ring-red-300">
-              Contact Sales
-            </button>
+          {/* RIGHT SIDE: Hero Image */}
+          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
+            <img
+              src="resources/online1.png" 
+              alt="Digital Online Payment Interface"
+              className="w-full max-w-lg h-auto rounded-3xl shadow-2xl object-cover transform transition duration-500 hover:scale-[1.02]"
+            />
           </div>
-        </div>
-
-        {/* RIGHT SIDE: Hero Image */}
-        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end p-4">
-          <img
-            src="resources/online1.png" 
-            alt="Digital Online Payment Interface"
-            className="w-full max-w-lg h-auto rounded-3xl shadow-2xl object-cover transform transition duration-500 hover:scale-[1.02]" // max-w-xl reduced to max-w-lg
-          />
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
 
 const PaymentLinks = () => (
     // Section with a light gray background for separation
