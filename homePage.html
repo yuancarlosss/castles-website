@@ -160,43 +160,42 @@ const duplicatedRow4 = [...row4Logos, ...row4Logos];
 
 const ShowcaseTerminalSection = () => {
     return (
-        <section className="py-20 bg-white" id="showcaseTerminal">
-            <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div className="space-y-6">
-                        <h2 className="text-4xl sm:text-5xl font-bold text-red-500 mb-4 leading-tight">
-                            Discover Our Terminals
-                        </h2>
-                        <h3 className="text-2xl font-bold text-gray-900">
-                            Explore the advanced features of our POS Terminals
-                        </h3>
-                        <p className="text-gray-600 leading-relaxed">
-                            Our Android Payment Terminals are designed to revolutionize your payment process with cutting-edge technology and user-friendly features.
-                        </p>
-                        <a 
-                            href="#contact"
-                            className="inline-block px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 transition-colors"
-                        >
-                            Learn More
-                        </a>
-                    </div>
-                    <div className="flex justify-center">
-                        <video 
-                            className="w-full max-w-4xl rounded-xl shadow-lg" 
-                            controls
-                            autoPlay
-                            loop
-                            muted
-                        >
-                            <source src="resources/vidcast.mp4" type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                </div>
+      <section className="py-10 bg-white" id="showcaseTerminal">
+        <div className="container mx-auto px-4">
+          <div className="space-y-6">
+            <div className="text-center">
+              <h2 className="text-4xl sm:text-5xl font-bold text-red-500 mb-2 leading-tight">
+                Discover Our Terminals
+              </h2>
+              <h3 className="text-2xl font-bold text-gray-900">
+                Explore the advanced features of our POS Terminals
+              </h3>
             </div>
-        </section>
+            <div className="flex justify-center">
+              <video 
+                className="w-full max-w-4xl rounded-xl shadow-lg" 
+                controls
+                autoPlay
+                loop
+                muted
+              >
+                <source src="resources/vidcast.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div className="flex justify-center">
+              <a 
+                href="contacts.html"
+                className="inline-block px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 transition-colors"
+              >
+                Learn More
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
     );
-};
+  };
 
 const ContactSection = () => {
     const [formData, setFormData] = React.useState({ fullName: '', email: '', company: '', mobile: '', subject: '', message: '' });
