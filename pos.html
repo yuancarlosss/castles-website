@@ -92,51 +92,50 @@
   <script type="text/babel">
     
     const Hero = () => (
-  // Main container: min-h reduced to 500px, py-16 retained, pt-28 retained.
-  <section className="relative overflow-hidden bg-white min-h-[500px] py-16 pt-28">
+    // Main container: min-h reduced to 500px, py-16 retained, pt-28 retained.
+    // ADDED: Background image classes
+    <section className="relative overflow-hidden min-h-[500px] py-16 pt-28
+                        bg-[url('resources/herobg.png')] bg-cover bg-center bg-no-repeat">
 
-    {/* Decorative background shape: Sizing reduced to match the new, smaller scale */}
-    <div className="absolute top-0 right-0 w-2/5 h-full bg-red-50/50 rounded-bl-[150px] hidden lg:block"></div>
+      {/* Content Wrapper (max width and centered) */}
+      <div className="container mx-auto px-4 relative z-10 p-4 rounded-lg">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
 
-    {/* Content Wrapper (max width and centered) */}
-    <div className="container mx-auto px-4 relative z-10">
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-8"> {/* Reduced gap from 12 to 8 */}
+          {/* LEFT SIDE: Solution Headline and Call to Action */}
+          <div className="w-full lg:w-1/2 space-y-4 text-center lg:text-left">
+            <p className="text-sm font-semibold uppercase tracking-widest text-red-200">
+              Accept All Payments
+            </p>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-tight">
+              IN-STORE
+              <span className="block text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black mt-1">
+                SOLUTIONS
+              </span>
+            </h1>
+            <p className="text-lg text-gray-100 max-w-lg mx-auto lg:mx-0 pt-4">
+              Accept all forms of digital payments with an all-in-one E-Wallet, QR Code, and debit and credit card machine. Seamless, fast, and secure for your business.
+            </p>
+            
+            <div className="pt-6 flex flex-col sm:flex-row justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4">
+              {/* Primary Button: "Get in Touch" with white background */}
+              <button className="px-8 py-3 text-lg font-semibold rounded-full shadow-xl transition duration-300 ease-in-out bg-white hover:bg-gray-200 text-red-500 transform hover:scale-[1.03]">
+                Get in Touch
+              </button>
+            </div>
+          </div>
 
-       {/* LEFT SIDE: Solution Headline and Call to Action */}
-       <div className="w-full lg:w-1/2 space-y-4 text-center lg:text-left p-4">
-          <p className="text-sm font-semibold uppercase tracking-widest text-red-500">
-            Accept All Payments
-          </p>
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-gray-900 leading-tight">
-            IN-STORE
-            <span className="block text-4xl sm:text-5xl lg:text-6xl font-extrabold text-red-600 mt-1"> {/* Reduced text size and margin top */}
-            SOLUTIONS
-            </span>
-          </h1>
-          <p className="text-lg text-gray-600 max-w-lg mx-auto lg:mx-0 pt-4">
-            Accept all forms of digital payments with an all-in-one E-Wallet, QR Code, and debit and credit card machine. Seamless, fast, and secure for your business.
-          </p>
-          
-          <div className="pt-6 flex flex-col sm:flex-row justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4">
-            {/* Primary Button: "Contact Sales" */}
-            <button className="px-8 py-3 text-lg font-semibold rounded-full shadow-xl transition duration-300 ease-in-out bg-red-500 hover:bg-red-600 text-white transform hover:scale-[1.03]">
-              Contact Sales
-            </button>
+          {/* RIGHT SIDE: Hero Image */}
+          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
+            <img
+              src="resources/store.png" 
+              alt="Digital Online Payment Interface"
+              className="w-full max-w-lg h-auto rounded-3xl shadow-2xl object-cover transform transition duration-500 hover:scale-[1.02]"
+            />
           </div>
         </div>
-
-        {/* RIGHT SIDE: Hero Image */}
-        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end p-4">
-          <img
-            src="resources/store.png" 
-            alt="Digital Online Payment Interface"
-            className="w-full max-w-lg h-auto rounded-3xl shadow-2xl object-cover transform transition duration-500 hover:scale-[1.02]" // max-w-xl reduced to max-w-lg
-          />
-        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
 
 const POSTerminalsSection = () => {
   const terminalImages = [

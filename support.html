@@ -76,7 +76,7 @@
         </div>
         <div className="relative w-full lg:w-[30%] z-10 hero-image-container">
           <img 
-            src="resources/product.png" 
+            src="resources/sups.png" 
             alt="Product"
             className="hero-image"
             onError={(e) => { e.target.src='resources/product.png'; }}
@@ -89,13 +89,24 @@
     const FAQItem = ({ question, answer }) => {
       const [isOpen, setIsOpen] = React.useState(false);
       
+      // Determine how to render the answer
+      const renderAnswer = (content) => {
+        // If the content is a string, assume it contains HTML and use dangerouslySetInnerHTML
+        if (typeof content === 'string') {
+          return <div className="text-gray-700 pb-2" dangerouslySetInnerHTML={{ __html: content }} />;
+        }
+        // If the content is a JSX element (like the <ul>), render it directly
+        return <div className="text-gray-700 pb-2">{content}</div>;
+      };
+
       return (
         <div className="border-b border-red-200 last:border-b-0">
           <button 
             className="flex justify-between items-center w-full py-4 text-left font-semibold text-lg text-red-700 hover:text-red-900 transition duration-300"
             onClick={() => setIsOpen(!isOpen)}
           >
-            {question}
+            {/* Fix for Question: Renders question as raw HTML/JSX */}
+            <span dangerouslySetInnerHTML={{ __html: question }} />
             <svg 
               className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'transform rotate-180 text-red-600' : 'text-red-400'}`} 
               fill="none" 
@@ -109,35 +120,73 @@
           <div 
             className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-96 opacity-100 py-2' : 'max-h-0 opacity-0'}`}
           >
-            <p className="text-gray-700 pb-2">{answer}</p>
+            {/* Fix for Answer: Call the function to correctly render the answer content */}
+            {renderAnswer(answer)}
           </div>
         </div>
       );
     };
 
     const Helpdesk = () => {
-      // All questions are set to "To Follow"
+      // Corrected FAQs to use <strong> tags inside the question string.
+      // The bold class is added to the <strong> tag for Tailwind styling.
       const faqs = [
         {
-          question: "To Follow",
-          answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+          question: "What are the requirements to apply as a <strong class='font-bold'>merchant</strong>?",
+          // FIX APPLIED: The answer is a string with HTML tags, but now the FAQItem handles it.
+          answer: "To qualify, you should have a <strong className='font-bold'>physical business location</strong> with <strong className='font-bold'>clear signage</strong> and <strong className='font-bold'>visible inventory</strong> or <strong className='font-bold'>stocks</strong>. (Optional: Attach photos of the <strong className='font-bold'>business premises</strong>)"
         },
         {
-          question: "To Follow",
-          answer: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          question: "For Application Submission",
+          // This answer is already a JSX element (<ul>), so it renders correctly.
+          answer: (
+            <ul className="list-disc pl-5 space-y-2">
+              <li><strong className='font-bold'>Duly signed Application Forms</strong> (hard copies)</li>
+              <li><strong className='font-bold'>DTI Certificate</strong> – for Single Proprietorship</li>
+              <li><strong className='font-bold'>SEC Registration</strong> with <strong className='font-bold'>Articles and By-Laws</strong> – for Corporation / OPC</li>
+              <li><strong className='font-bold'>Updated General Information Sheet (GIS)</strong> – if applicable</li>
+              <li><strong className='font-bold'>BIR Certificate of Registration (Form 2303)</strong></li>
+              <li><strong className='font-bold'>Valid Business Permit</strong></li>
+              <li><strong className='font-bold'>Proof of Bank Account</strong> under the registered <strong className='font-bold'>business name</strong> (for settlement purposes)</li>
+              <li><strong className='font-bold'>Valid IDs</strong> of <strong className='font-bold'>Authorized Signatories</strong></li>
+            </ul>
+          )
         },
         {
-          question: "To Follow",
-          answer: "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt."
+          question: "What is the usual processing time for an <strong class='font-bold'>application</strong>?",
+          // FIX APPLIED: The answer is a string with HTML tags, but now the FAQItem handles it.
+          answer: "<strong className='font-bold'>Application approval</strong> usually takes <strong className='font-bold'>7–14 days</strong> after submitting complete <strong className='font-bold'>requirements</strong>. If there are no issues found and the <strong className='font-bold'>merchant</strong> is easily reachable for <strong className='font-bold'>verification</strong>, approval can be done in as fast as <strong className='font-bold'>7 days</strong>. <strong className='font-bold'>Installation</strong> follows within <strong className='font-bold'>3 days</strong> (Metro Manila) or <strong className='font-bold'>7 days</strong> (outside Metro Manila)."
         },
         {
-          question: "To Follow",
-          answer: "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem."
+          question: "Can I use my own preferred <strong class='font-bold'>bank account</strong> for the <strong class='font-bold'>settlements</strong>?",
+          // FIX APPLIED: The answer is a string with HTML tags, but now the FAQItem handles it.
+          answer: "<strong className='font-bold'>Merchants</strong> may nominate any preferred <strong className='font-bold'>bank</strong> as their <strong className='font-bold'>settlement account</strong>, as long as the account is registered under the <strong className='font-bold'>business name</strong>."
         },
         {
-          question: "To Follow",
-          answer: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident."
-        }
+          question: "Is there a <strong class='font-bold'>contract</strong> or <strong class='font-bold'>lock-in period</strong> I should be aware of?",
+          // FIX APPLIED: The answer is a string with HTML tags, but now the FAQItem handles it.
+          answer: "Yes, <strong className='font-bold'>merchants</strong> are subject to a <strong className='font-bold'>two-year contract term</strong>."
+        },
+        {
+          question: "How long does it take for the <strong class='font-bold'>settlement</strong> to be credited to my <strong class='font-bold'>account</strong> after each <strong class='font-bold'>transaction</strong>?",
+          // FIX APPLIED: The answer is a string with HTML tags, but now the FAQItem handles it.
+          answer: "<strong className='font-bold'>Settlement proceeds</strong> from <strong className='font-bold'>in-store payment terminals</strong> are credited on the <strong className='font-bold'>next banking day</strong>. For <strong className='font-bold'>online transactions</strong>, <strong className='font-bold'>settlement</strong> typically occurs within <strong className='font-bold'>three (3) business days</strong>."
+        },
+        {
+          question: "Can I offer <strong className='font-bold'>installment plans</strong> to my <strong className='font-bold'>customer</strong>?",
+          // FIX APPLIED: The answer is a string with HTML tags, but now the FAQItem handles it.
+          answer: "Yes, we have <strong className='font-bold'>partner banks</strong> that offer <strong className='font-bold'>reduced rate</strong>, <strong className='font-bold'>0%</strong>, and <strong className='font-bold'>Shop Now, Pay Later</strong> <strong className='font-bold'>installment plans</strong>. <strong className='font-bold'>Settlements</strong> are credited in full on the <strong className='font-bold'>next banking day</strong>."
+        },
+        {
+          question: "How fast is the <strong className='font-bold'>servicing</strong> or <strong className='font-bold'>replacement</strong> of my <strong className='font-bold'>terminal</strong> after I report an <strong className='font-bold'>issue</strong>?",
+          // FIX APPLIED: The answer is a string with HTML tags, but now the FAQItem handles it.
+          answer: "<strong className='font-bold'>Servicing</strong> is completed within <strong className='font-bold'>3 business days</strong> for <strong className='font-bold'>merchants</strong> in <strong className='font-bold'>Metro Manila</strong> and within <strong className='font-bold'>7 business days</strong> for those <strong className='font-bold'>outside Metro Manila</strong>. Our <strong className='font-bold'>Helpdesk Team</strong> can also assist and resolve certain <strong className='font-bold'>issues</strong> remotely, ensuring faster <strong className='font-bold'>response</strong> and minimal <strong className='font-bold'>downtime</strong>."
+        },
+        {
+          question: "How do I generate <strong className='font-bold'>transaction</strong> or <strong className='font-bold'>sales reports</strong>?",
+          // FIX APPLIED: The answer is a string with HTML tags, but now the FAQItem handles it.
+          answer: "We provide access to our <strong className='font-bold'>e-Receipt Portal</strong>, where you can view <strong className='font-bold'>transactions</strong> in <strong className='font-bold'>real time</strong> and easily perform <strong className='font-bold'>reconciliation</strong>."
+        },
       ];
 
       return (
@@ -155,7 +204,7 @@
                   <p className="mb-2"><strong>Email:</strong> merchantinquiry@castech.asia</p>
                   <p className="mb-2"><strong>Hotline:</strong> (63) 915 3857386 / (63) 968 5877233</p>
                   <p className="mb-2"><strong>Operating Hours:</strong> Mon–Sun, 8:00 AM–9:00 PM</p>
-                  <p className="mb-2"><strong>Viber Support:</strong> <a href="#" className="text-white font-semibold hover:underline">Contact Us</a></p>
+                  <p className="mb-2"><strong>Viber Support:</strong> <a href="#" className="text-white font-semibold hover:underline">+63 968 587 7233</a></p>
                 </div>
 
                 {/* Resources Section (Now below Contact Support) */}
@@ -167,7 +216,6 @@
                   </div>
                 </div>
               </div>
-
 
               {/* Request Form (Right Column, maintaining its original size) */}
               <div className="lg:col-span-1 p-8 bg-white rounded-xl shadow-lg">

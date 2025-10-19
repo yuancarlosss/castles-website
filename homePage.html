@@ -56,69 +56,37 @@
             z-index: -1;
         }
         
-        .testimonial-card-container {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            transition: transform 0.5s ease-in-out;
-            gap: 1.5rem; /* Equivalent to gap-6 */
-        }
-
-        .testimonial-card {
-            width: 100%;
-        }
-
-        @media (min-width: 768px) {
-            .testimonial-card-container {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .testimonial-card-container {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-
-        .testimonial-carousel-wrapper {
-            overflow: hidden;
-        }
         .marquee-wrapper {
-        overflow: hidden;
-        width: 100%;
-        position: relative;
+            overflow: hidden;
+            width: 100%;
+            position: relative;
         }
-
-          .marquee {
-              display: flex;
-              gap: 1.5rem;
-              align-items: center;
-              width: max-content;
-              will-change: transform;
-              animation: marquee-left linear infinite;
-          }
-
-          /* Define different speeds for each row using CSS custom properties */
-          .marquee-row1 { animation-duration: var(--marquee-duration, 40s); }
-          .marquee-row2 { animation-duration: var(--marquee-duration, 32s); }
-          .marquee-row3 { animation-duration: var(--marquee-duration, 48s); }
-          .marquee-row4 { animation-duration: var(--marquee-duration, 36s); }
-
-          @keyframes marquee-left {
-              0% { transform: translateX(0); }
-              100% { transform: translateX(-50%); }
-          }
-
-          .marquee img {
-              flex-shrink: 0;
-              height: 4rem;
-              width: auto;
-          }
-
-          .marquee, .marquee img {
-              backface-visibility: hidden;
-              -webkit-font-smoothing: antialiased;
-              -webkit-backface-visibility: hidden;
-          }
+        .marquee {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            width: max-content;
+            will-change: transform;
+            animation: marquee-left linear infinite;
+        }
+        .marquee-row1 { animation-duration: var(--marquee-duration, 40s); }
+        .marquee-row2 { animation-duration: var(--marquee-duration, 32s); }
+        .marquee-row3 { animation-duration: var(--marquee-duration, 48s); }
+        .marquee-row4 { animation-duration: var(--marquee-duration, 36s); }
+        @keyframes marquee-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee img {
+            flex-shrink: 0;
+            height: 4rem;
+            width: auto;
+        }
+        .marquee, .marquee img {
+            backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
+            -webkit-backface-visibility: hidden;
+        }
     </style>
 </head>
 <body>
@@ -127,7 +95,6 @@
 
 <script type="text/babel" src="scripts/navBar.js"></script>
 <script type="text/babel" src="scripts/footer.js"></script>
-<script type="text/babel" src="scripts/testimonial.js"></script>
 
 <script type="text/babel">
 
@@ -144,8 +111,8 @@ const row1Logos = [
     "logos/2.png",
     "logos/31.png",
     "logos/77.png",
-  ];
-  const row2Logos = [
+];
+const row2Logos = [
     "logos/bare.png",
     "logos/nail.png",
     "logos/redm.png",
@@ -157,8 +124,8 @@ const row1Logos = [
     "logos/2o.png",
     "logos/3.png",
     "logos/30.png",
-  ];
-  const row3Logos = [
+];
+const row3Logos = [
     "logos/4.png",
     "logos/5.png",
     "logos/6.png",
@@ -170,8 +137,8 @@ const row1Logos = [
     "logos/12.png",
     "logos/13.png",
     "logos/29.png",
-  ];
-  const row4Logos = [
+];
+const row4Logos = [
     "logos/14.png",
     "logos/15.png",
     "logos/16.png",
@@ -184,457 +151,479 @@ const row1Logos = [
     "logos/26.png",
     "logos/27.png",
     "logos/28.png",
-  ];
+];
 
-  // Duplicate logos for seamless looping
-  const duplicatedRow1 = [...row1Logos, ...row1Logos];
-  const duplicatedRow2 = [...row2Logos, ...row2Logos];
-  const duplicatedRow3 = [...row3Logos, ...row3Logos];
-  const duplicatedRow4 = [...row4Logos, ...row4Logos];
+const duplicatedRow1 = [...row1Logos, ...row1Logos];
+const duplicatedRow2 = [...row2Logos, ...row2Logos];
+const duplicatedRow3 = [...row3Logos, ...row3Logos];
+const duplicatedRow4 = [...row4Logos, ...row4Logos];
 
-
-const ContactSection = () => {
-  const [formData, setFormData] = useState({ fullName: '', email: '', company: '', mobile: '', subject: '', message: '' });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrorMessage(''); // Clear error message on input change
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Validate required fields
-    if (!formData.fullName || !formData.email || !formData.subject || !formData.message) {
-      setErrorMessage('Please fill out all required fields: Full Name, Email Address, Subject, and Message.');
-      return;
-    }
-
-    const data = {
-      fullName: formData.fullName,
-      email: formData.email,
-      mobile: formData.mobile,
-      company: formData.company,
-      subject: formData.subject,
-      message: formData.message,
-      submittedAt: new Date().toISOString()
-    };
-
-    try {
-      const response = await fetch('http://localhost:3000/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      console.log('Response status:', response.status);
-      console.log('Response:', await response.text());
-      if (response.ok) {
-        console.log('Form Submitted:', data);
-        setFormData({ fullName: '', email: '', company: '', mobile: '', subject: '', message: '' });
-        setIsModalOpen(true);
-      } else {
-        console.error('Error submitting form:', await response.text());
-        setErrorMessage('Error submitting form. Please try again.');
-      }
-    } catch (error) {
-      console.error('Fetch error:', error);
-      setErrorMessage('Error submitting form. Please try again.');
-    }
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const filteredSocialLinks = [
-    {
-      icon: (
-        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M22.258 1H.742C.333 1 0 1.333 0 1.742v20.516C0 22.667.333 23 .742 23h21.516c.409 0 .742-.333.742-.742V1.742C23 1.333 22.667 1 22.258 1zM7.227 20.315H3.725V9.45H7.227v10.865zM5.47 7.97a1.99 1.99 0 110-3.98 1.99 1.99 0 010 3.98zM20.315 20.315h-3.502V14.88c0-1.32-.47-2.228-1.666-2.228-1.282 0-2.04.87-2.378 1.71v5.953h-3.502V9.45h3.502v1.53c.465-.795 1.503-1.928 3.14-1.928 2.296 0 4.02 1.5 4.02 4.74v6.523z"/>
-        </svg>
-      ),
-      href: "https://www.linkedin.com/company/CastlesTech"
-    },
-    {
-      icon: (
-        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.656 9.125 8.438 9.874V15.42H7.485V12h2.953V9.38c0-3.462 2.083-5.362 5.178-5.362 1.47 0 2.738.261 3.102.377v3.364l-1.995.001c-1.562 0-1.862.744-1.862 1.832V12h3.763l-.602 3.42h-3.161v5.474C18.344 21.125 22 16.991 22 12z"/>
-        </svg>
-      ),
-      href: "https://www.facebook.com/CastlesTech"
-    },
-    {
-      icon: (
-        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2.163c3.204 0 3.584.013 4.85.068 1.45.065 2.585.293 3.518.66 1.05.404 1.916 1.096 2.56 1.74.644.644 1.336 1.51 1.74 2.56.366.933.593 2.068.66 3.518.055 1.266.068 1.646.068 4.85 0 3.204-.013 3.584-.068 4.85-.065 1.45-.293 2.585-.66 3.518-.404 1.05-1.096 1.916-1.74 2.56-.644.644-1.51 1.336-2.56 1.74-.933.366-2.068.593-3.518.66-1.266.055-1.646.068-4.85.068-3.204 0-3.584-.013-4.85-.068-1.45-.065-2.585-.293-3.518-.66-1.05-.404-1.916-1.096-2.56-1.74-.644-.644-1.336-1.51-1.74-2.56-.366-.933-.593-2.068-.66-3.518-.055-1.266-.068-1.646-.068-4.85 0-3.204.013-3.584.068-4.85.065-1.45.293-2.585.66-3.518.404-1.05 1.096-1.916 1.74-2.56.644-.644 1.51-1.336 2.56-1.74.933-.366 2.068-.593 3.518-.66 1.266-.055 1.646-.068 4.85-.068zm0-2.163c-3.268 0-3.692.013-4.966.068-1.49.065-2.71.302-3.68.75-.98.467-1.785 1.272-2.252 2.252-.448.97-.685 2.19-.75 3.68-.055 1.274-.068 1.698-.068 4.966 0 3.268.013 3.692.068 4.966.065 1.49.302 2.71.75 3.68.467.98 1.272 1.785 2.252 2.252.97.448 2.19.685 3.68.75 1.274.055 1.698.068 4.966.068 3.268 0 3.692-.013 4.966-.068 1.49-.065 2.71-.302 3.68-.75.98-.467 1.785-1.272 2.252-2.252.448-.97.685-2.19.75-3.68.055-1.274.068-1.698.068-4.966 0-3.268-.013-3.692-.068-4.966-.065-1.49-.302-2.71-.75-3.68-.467-.98-1.272-1.785-2.252-2.252-.97-.448-2.19-.685-3.68-.75-1.274-.055-1.698-.068-4.966-.068zM12 17.8c-3.204 0-5.8-2.596-5.8-5.8 0-3.204 2.596-5.8 5.8-5.8 3.204 0 5.8 2.596 5.8 5.8 0 3.204-2.596 5.8-5.8 5.8zm0-9.8c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm6.4-.316c-.54 0-.97.43-.97.97s.43.97.97.97.97-.43.97-.97-.43-.97-.97-.97z"/>
-        </svg>
-      ),
-      href: "https://www.instagram.com/CastlesTech"
-    }
-  ];
-
-  return (
-    <section className="bg-red-500 py-16 text-white" id="contact">
-      <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div className="space-y-8">
-          <h2 className="text-5xl font-extrabold mb-8">Get in touch</h2>
-          <div className="space-y-6">
-            <div>
-              <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Email</h4>
-              <a href="mailto:hello@castlesph.com" className="text-lg font-bold hover:underline">merchantinquiry@castech.asia</a>
+const ShowcaseTerminalSection = () => {
+    return (
+        <section className="py-20 bg-white" id="showcaseTerminal">
+            <div className="container mx-auto px-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div className="space-y-6">
+                        <h2 className="text-4xl sm:text-5xl font-bold text-red-500 mb-4 leading-tight">
+                            Discover Our Terminals
+                        </h2>
+                        <h3 className="text-2xl font-bold text-gray-900">
+                            Explore the advanced features of our POS Terminals
+                        </h3>
+                        <p className="text-gray-600 leading-relaxed">
+                            Our Android Payment Terminals are designed to revolutionize your payment process with cutting-edge technology and user-friendly features.
+                        </p>
+                        <a 
+                            href="#contact"
+                            className="inline-block px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 transition-colors"
+                        >
+                            Learn More
+                        </a>
+                    </div>
+                    <div className="flex justify-center">
+                        <video 
+                            className="w-full max-w-4xl rounded-xl shadow-lg" 
+                            controls
+                            autoPlay
+                            loop
+                            muted
+                        >
+                            <source src="resources/vidcast.mp4" type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
             </div>
-            <div>
-              <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Phone</h4>
-              <a href="tel:+12553526258" className="text-lg font-bold hover:underline">(02) 8531 0708</a>
-            </div>
-            <div>
-              <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Address</h4>
-              <p className="text-lg font-bold">UNIT 616, CITY AND LAND MEGA PLAZA ADB AVE,<br/>CORNER Garnet Rd, Pasig, 1600 Metro Manila</p>
-            </div>
-          </div>
-          <div className="pt-6 flex space-x-4">
-            {filteredSocialLinks.map((link, index) => (
-              <a key={index} href={link.href} className="text-white hover:text-white/80 transition-colors" target="_blank" rel="noopener noreferrer">
-                {link.icon}
-              </a>
-            ))}
-          </div>
-        </div>
-        <div className="bg-white p-6 sm:p-8 rounded-xl shadow-2xl text-gray-800">
-          <h3 className="text-2xl font-bold text-red-500 mb-6">Send us a message!</h3>
-          <div className="space-y-4">
-            {errorMessage && (
-              <div className="text-red-500 text-sm font-semibold">{errorMessage}</div>
-            )}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                name="fullName"
-                placeholder="Full Name (Required)"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                required
-                value={formData.fullName}
-                onChange={handleChange}
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address (Required)"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                required
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                name="company"
-                placeholder="Company Name"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                value={formData.company}
-                onChange={handleChange}
-              />
-              <input
-                type="tel"
-                name="mobile"
-                placeholder="Mobile Number"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                value={formData.mobile}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                name="subject"
-                placeholder="Subject (Required)"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-                required
-                value={formData.subject}
-                onChange={handleChange}
-              />
-            </div>
-            <textarea
-              name="message"
-              placeholder="Your Message"
-              rows="5"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
-              required
-              value={formData.message}
-              onChange={handleChange}
-            ></textarea>
-            <div className="text-right">
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 transition-colors"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Thank You!</h2>
-            <p className="text-gray-600 mb-6">Your message has been sent successfully. We will be in touch soon!</p>
-            <button
-              onClick={closeModal}
-              className="w-full px-4 py-2 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 transition-colors"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-    </section>
-  );
+        </section>
+    );
 };
 
+const ContactSection = () => {
+    const [formData, setFormData] = React.useState({ fullName: '', email: '', company: '', mobile: '', subject: '', message: '' });
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState('');
 
-
-    const App = () => {
-        const handRef = useRef(null);
-
-        useEffect(() => {
-            const handleScroll = () => {
-                const scrollY = window.scrollY;
-                const heroHeight = document.querySelector('header').offsetHeight;
-                const scrollProgress = Math.min(scrollY / heroHeight, 1);
-                
-                const handYOffset = scrollProgress * -200; 
-                const handRotation = scrollProgress * 15;
-                const handOpacity = 1 - scrollProgress;
-
-                if (handRef.current) {
-                    handRef.current.style.transform = `translateY(${handYOffset}px) rotate(${handRotation}deg)`;
-                    handRef.current.style.opacity = handOpacity;
-                }
-            };
-
-            window.addEventListener('scroll', handleScroll);
-            handleScroll();
-            
-            return () => {
-                window.removeEventListener('scroll', handleScroll);
-            };
-        }, []);
-
-        return (
-            <React.Fragment>
-                <Navbar />
-                <header className="relative w-full overflow-hidden flex flex-col items-center justify-center pt-24 pb-16">
-                    <div className="hero-bg-wave"></div>
-                    <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between z-10">
-                        <div className="text-center lg:text-left lg:w-1/2 mb-10 lg:mb-0">
-                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-                                Go Cashless,<br/> Grow Seamless!
-                            </h1>
-                            <p className="text-xl text-white/90 mb-8">
-                                Choose Castles Technology’s Android Payment Terminals for a smarter, more secure, and future-ready payment solution. 
-                            </p>
-                            <a 
-                                href="contacts.html"
-                                className="inline-block px-8 py-4 bg-red-500 text-white font-bold rounded-full shadow-lg hover:bg-red-600 transform hover:scale-105 transition-transform duration-300"
-                            >
-                                Start Now
-                            </a>
-                        </div>
-                        <div className="lg:w-1/2 flex justify-center lg:justify-end relative">
-                            <div className="relative">
-                                <img src="resources/pos.png" onError="this.onerror=null;this.src='https://placehold.co/400x400/2c2c2c/ffffff?text=POS+Terminal';" alt="POS Terminal" className="max-w-sm sm:max-w-md lg:max-w-2xl z-10 relative" />
-                                <div ref={handRef} className="absolute z-20" style={{ transform: 'rotate(15deg)', transformOrigin: 'bottom right', right: '-10rem', bottom: '5rem' }}>
-                                    <img src="resources/hand2.png" onError="this.onerror=null;this.src='https://placehold.co/300x300/2c2c2c/ffffff?text=Hand';" alt="Hand" className="w-96 h-auto"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-
-                <section className="py-20 bg-white">
-                    <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center lg:space-x-12">
-                        <div className="lg:w-1/2 mb-10 lg:mb-0">
-                            <img src="resources/bg2.png" alt="Product" className="w-full rounded-2xl shadow-xl" />
-                        </div>
-                        <div className="lg:w-1/2 text-center lg:text-left">
-                            <h2 className="text-lg font-bold text-gray-400 uppercase mb-2">About the POS</h2>
-                            <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
-                                Best and Fashionable Smart POS for Easy Life.
-                            </h3>
-                            <p className="text-gray-600 mb-6 leading-relaxed">
-                                Our cutting-edge smart POS system is designed to seamlessly integrate into your business, combining sleek aesthetics with powerful functionality. It's more than just a payment terminal—it's a complete business solution that simplifies operations and enhances customer experience.
-                            </p>
-                            <ul className="space-y-2 text-gray-600">
-                                <li className="flex items-center">
-                                    <svg className="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Attractive interface with many options
-                                </li>
-                                <li className="flex items-center">
-                                    <svg className="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Live chat and instant notification
-                                </li>
-                                <li className="flex items-center">
-                                    <svg className="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Install App with unlimited features
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="py-16 bg-gray-200">
-                  <div className="container mx-auto px-4">
-                      <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10">
-                          <div className="text-left">
-                              <h2 className="text-5xl font-extrabold text-gray-900 mb-2">Our Clients and Partners</h2>
-                              <p className="text-xl font-bold text-red-500 mb-6">
-                                  Join the ranks of our satisfied partners
-                              </p>
-                              <p className="text-lg text-gray-700 max-w-md ml-0 lg:ml-8">
-                                  Boost your sales potential with our solutions, which support the
-                                  country’s most widely used payment networks.
-                              </p>
-                          </div>
-                          <div className="space-y-8">
-                              <div className="overflow-hidden marquee-wrapper">
-                                  <div className="marquee marquee-row1 flex space-x-12">
-                                      {duplicatedRow1.map((src, index) => (
-                                          <img
-                                              key={`row1-${index}`}
-                                              src={src}
-                                              alt="Payment Partner Logo"
-                                              className="h-16 w-auto flex-shrink-0"
-                                              onError={(e) => { e.target.src = 'resources/placeholder.png'; }}
-                                          />
-                                      ))}
-                                  </div>
-                              </div>
-                              <div className="overflow-hidden marquee-wrapper">
-                                  <div className="marquee marquee-row2 flex space-x-12">
-                                      {duplicatedRow2.map((src, index) => (
-                                          <img
-                                              key={`row2-${index}`}
-                                              src={src}
-                                              alt="Payment Partner Logo"
-                                              className="h-16 w-auto flex-shrink-0"
-                                              onError={(e) => { e.target.src = 'resources/placeholder.png'; }}
-                                          />
-                                      ))}
-                                  </div>
-                              </div>
-                              <div className="overflow-hidden marquee-wrapper">
-                                  <div className="marquee marquee-row3 flex space-x-12">
-                                      {duplicatedRow3.map((src, index) => (
-                                          <img
-                                              key={`row3-${index}`}
-                                              src={src}
-                                              alt="Payment Partner Logo"
-                                              className="h-16 w-auto flex-shrink-0"
-                                              onError={(e) => { e.target.src = 'resources/placeholder.png'; }}
-                                          />
-                                      ))}
-                                  </div>
-                              </div>
-                              <div className="overflow-hidden marquee-wrapper">
-                                  <div className="marquee marquee-row4 flex space-x-12">
-                                      {duplicatedRow4.map((src, index) => (
-                                          <img
-                                              key={`row4-${index}`}
-                                              src={src}
-                                              alt="Payment Partner Logo"
-                                              className="h-16 w-auto flex-shrink-0"
-                                              onError={(e) => { e.target.src = 'resources/placeholder.png'; }}
-                                          />
-                                      ))}
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </section>
-                
-                <section className="py-20 bg-gray-50">
-                    <div className="container mx-auto px-4">
-                        <div className="text-center mb-12">
-                            <h2 className="text-4xl sm:text-5xl font-bold text-red-500 mb-4 leading-tight">
-                                Why Choose Us?
-                            </h2>
-                            <p className="text-lg text-gray-700 max-w-xl mx-auto font-bold">
-                              Competitive Pricing, Zero Setup Fees. No Sales Targets
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                            <div className="bg-white p-6 rounded-xl text-center shadow-lg border border-red-100 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-                                <div className="bg-red-50 p-3 rounded-full inline-block mb-4">
-                                    <img src="resources/supp.png" alt="Helpdesk Icon" className="w-10 h-10" />
-                                </div>
-                                <h4 className="font-bold text-gray-800 text-base mb-2">
-                                    Nationwide Helpdesk & On-site Servicing
-                                </h4>
-                                <p className="text-sm text-gray-500">
-                                    Top-tier support available nationwide, ensuring you’re never left on your own.
-                                </p>
-                            </div>
-
-                            <div className="bg-white p-6 rounded-xl text-center shadow-lg border border-red-100 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl mt-0 lg:mt-16">
-                                <div className="bg-red-50 p-3 rounded-full inline-block mb-4">
-                                    <img src="resources/bank.png" alt="Bank Icon" className="w-10 h-10" />
-                                </div>
-                                <h4 className="font-bold text-gray-800 text-base mb-2">
-                                    Next Banking Day Payments
-                                </h4>
-                                <p className="text-sm text-gray-500">
-                                    Get paid without delay, with funds deposited by the next business day.
-                                </p>
-                            </div>
-
-                            <div className="bg-white p-6 rounded-xl text-center shadow-lg border border-red-100 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-                                <div className="bg-red-50 p-3 rounded-full inline-block mb-4">
-                                    <img src="resources/trust.png" alt="Trusted Icon" className="w-10 h-10" />
-                                </div>
-                                <h4 className="font-bold text-gray-800 text-base mb-2">
-                                    Trusted Globally
-                                </h4>
-                                <p className="text-sm text-gray-500">
-                                    Proudly trusted by local and global banks, as well as major retail outlets.
-                                </p>
-                            </div>
-
-                            <div className="bg-white p-6 rounded-xl text-center shadow-lg border border-red-100 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl mt-0 lg:mt-16">
-                                <div className="bg-red-50 p-3 rounded-full inline-block mb-4">
-                                    <img src="resources/lock.png" alt="Security Icon" className="w-10 h-10" />
-                                </div>
-                                <h4 className="font-bold text-gray-800 text-base mb-2">
-                                    Seamless & Secure
-                                </h4>
-                                <p className="text-sm text-gray-500">
-                                    Our solutions are built for simplicity, ensuring a seamless and secure experience.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <TestimonialsSection />
-                <ContactSection />
-                <Footer />
-            </React.Fragment>
-        );
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setErrorMessage('');
     };
 
-    ReactDOM.render(<App />, document.getElementById('root'));
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!formData.fullName || !formData.email || !formData.subject || !formData.message) {
+            setErrorMessage('Please fill out all required fields: Full Name, Email Address, Subject, and Message.');
+            return;
+        }
+        const data = {
+            fullName: formData.fullName,
+            email: formData.email,
+            mobile: formData.mobile,
+            company: formData.company,
+            subject: formData.subject,
+            message: formData.message,
+            submittedAt: new Date().toISOString()
+        };
+        try {
+            const response = await fetch('http://localhost:3000/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (response.ok) {
+                setFormData({ fullName: '', email: '', company: '', mobile: '', subject: '', message: '' });
+                setIsModalOpen(true);
+            } else {
+                setErrorMessage('Error submitting form. Please try again.');
+            }
+        } catch (error) {
+            setErrorMessage('Error submitting form. Please try again.');
+        }
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const filteredSocialLinks = [
+        {
+            icon: (
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M22.258 1H.742C.333 1 0 1.333 0 1.742v20.516C0 22.667.333 23 .742 23h21.516c.409 0 .742-.333.742-.742V1.742C23 1.333 22.667 1 22.258 1zM7.227 20.315H3.725V9.45H7.227v10.865zM5.47 7.97a1.99 1.99 0 110-3.98 1.99 1.99 0 010 3.98zM20.315 20.315h-3.502V14.88c0-1.32-.47-2.228-1.666-2.228-1.282 0-2.04.87-2.378 1.71v5.953h-3.502V9.45h3.502v1.53c.465-.795 1.503-1.928 3.14-1.928 2.296 0 4.02 1.5 4.02 4.74v6.523z"/>
+                </svg>
+            ),
+            href: "https://www.linkedin.com/company/CastlesTech"
+        },
+        {
+            icon: (
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.656 9.125 8.438 9.874V15.42H7.485V12h2.953V9.38c0-3.462 2.083-5.362 5.178-5.362 1.47 0 2.738.261 3.102.377v3.364l-1.995.001c-1.562 0-1.862.744-1.862 1.832V12h3.763l-.602 3.42h-3.161v5.474C18.344 21.125 22 16.991 22 12z"/>
+                </svg>
+            ),
+            href: "https://www.facebook.com/CastlesTech"
+        },
+        {
+            icon: (
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 2.163c3.204 0 3.584.013 4.85.068 1.45.065 2.585.293 3.518.66 1.05.404 1.916 1.096 2.56 1.74.644.644 1.336 1.51 1.74 2.56.366.933.593 2.068.66 3.518.055 1.266.068 1.646.068 4.85 0 3.204-.013 3.584-.068 4.85-.065 1.45-.293 2.585-.66 3.518-.404 1.05-1.096 1.916-1.74 2.56-.644.644-1.51 1.336-2.56 1.74-.933.366-2.068.593-3.518.66-1.266.055-1.646.068-4.85.068-3.204 0-3.584-.013-4.85-.068-1.45-.065-2.585-.293-3.518-.66-1.05-.404-1.916-1.096-2.56-1.74-.644-.644-1.336-1.51-1.74-2.56-.366-.933-.593-2.068-.66-3.518-.055-1.266-.068-1.646-.068-4.85 0-3.204.013-3.584.068-4.85.065-1.45.293-2.585.66-3.518.404-1.05 1.096-1.916 1.74-2.56.644-.644 1.51-1.336 2.56-1.74.933-.366 2.068-.593 3.518-.66 1.266-.055 1.646-.068 4.85-.068zm0-2.163c-3.268 0-3.692.013-4.966.068-1.49.065-2.71.302-3.68.75-.98.467-1.785 1.272-2.252 2.252-.448.97-.685 2.19-.75 3.68-.055 1.274-.068 1.698-.068 4.966 0 3.268.013 3.692.068 4.966.065 1.49.302 2.71.75 3.68.467.98 1.272 1.785 2.252 2.252.97.448 2.19.685 3.68.75 1.274.055 1.698.068 4.966.068 3.268 0 3.692-.013 4.966-.068 1.49-.065 2.71-.302 3.68-.75.98-.467 1.785-1.272 2.252-2.252.448-.97.685-2.19.75-3.68.055-1.274.068-1.698.068-4.966 0-3.268-.013-3.692-.068-4.966-.065-1.49-.302-2.71-.75-3.68-.467-.98-1.272-1.785-2.252-2.252-.97-.448-2.19-.685-3.68-.75-1.274-.055-1.698-.068-4.966-.068zM12 17.8c-3.204 0-5.8-2.596-5.8-5.8 0-3.204 2.596-5.8 5.8-5.8 3.204 0 5.8 2.596 5.8 5.8 0 3.204-2.596 5.8-5.8 5.8zm0-9.8c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm6.4-.316c-.54 0-.97.43-.97.97s.43.97.97.97.97-.43.97-.97-.43-.97-.97-.97z"/>
+                </svg>
+            ),
+            href: "https://www.instagram.com/CastlesTech"
+        }
+    ];
+
+    return (
+        <section className="bg-red-500 py-16 text-white" id="contact">
+            <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-8">
+                    <h2 className="text-5xl font-extrabold mb-8">Get in touch</h2>
+                    <div className="space-y-6">
+                        <div>
+                            <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Email</h4>
+                            <a href="mailto:hello@castlesph.com" className="text-lg font-bold hover:underline">merchantinquiry@castech.asia</a>
+                        </div>
+                        <div>
+                            <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Phone</h4>
+                            <a href="tel:+12553526258" className="text-lg font-bold hover:underline">(02) 8531 0708</a>
+                        </div>
+                        <div>
+                            <h4 className="text-xs font-bold uppercase opacity-70 mb-1">Address</h4>
+                            <p className="text-lg font-bold">UNIT 616, CITY AND LAND MEGA PLAZA ADB AVE,<br/>CORNER Garnet Rd, Pasig, 1600 Metro Manila</p>
+                        </div>
+                    </div>
+                    <div className="pt-6 flex space-x-4">
+                        {filteredSocialLinks.map((link, index) => (
+                            <a key={index} href={link.href} className="text-white hover:text-white/80 transition-colors" target="_blank" rel="noopener noreferrer">
+                                {link.icon}
+                            </a>
+                        ))}
+                    </div>
+                </div>
+                <div className="bg-white p-6 sm:p-8 rounded-xl shadow-2xl text-gray-800">
+                    <h3 className="text-2xl font-bold text-red-500 mb-6">Send us a message!</h3>
+                    <div className="space-y-4">
+                        {errorMessage && (
+                            <div className="text-red-500 text-sm font-semibold">{errorMessage}</div>
+                        )}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input
+                                type="text"
+                                name="fullName"
+                                placeholder="Full Name (Required)"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                                required
+                                value={formData.fullName}
+                                onChange={handleChange}
+                            />
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Email Address (Required)"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                                required
+                                value={formData.email}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input
+                                type="text"
+                                name="company"
+                                placeholder="Company Name"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                                value={formData.company}
+                                onChange={handleChange}
+                            />
+                            <input
+                                type="tel"
+                                name="mobile"
+                                placeholder="Mobile Number"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                                value={formData.mobile}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="text"
+                                name="subject"
+                                placeholder="Subject (Required)"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                                required
+                                value={formData.subject}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <textarea
+                            name="message"
+                            placeholder="Your Message"
+                            rows="5"
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500"
+                            required
+                            value={formData.message}
+                            onChange={handleChange}
+                        ></textarea>
+                        <div className="text-right">
+                            <button
+                                type="button"
+                                onClick={handleSubmit}
+                                className="px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 transition-colors"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Thank You!</h2>
+                        <p className="text-gray-600 mb-6">Your message has been sent successfully. We will be in touch soon!</p>
+                        <button
+                            onClick={closeModal}
+                            className="w-full px-4 py-2 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 transition-colors"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+        </section>
+    );
+};
+
+const App = () => {
+    const handRef = React.useRef(null);
+
+    React.useEffect(() => {
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+            const heroHeight = document.querySelector('header').offsetHeight;
+            const scrollProgress = Math.min(scrollY / heroHeight, 1);
+            const handYOffset = scrollProgress * -200;
+            const handRotation = scrollProgress * 15;
+            const handOpacity = 1 - scrollProgress;
+
+            if (handRef.current) {
+                handRef.current.style.transform = `translateY(${handYOffset}px) rotate(${handRotation}deg)`;
+                handRef.current.style.opacity = handOpacity;
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
+        
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    return (
+        <React.Fragment>
+            <Navbar />
+            <header className="relative w-full overflow-hidden flex flex-col items-center justify-center pt-24 pb-16">
+                <div className="hero-bg-wave"></div>
+                <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between z-10">
+                    <div className="text-center lg:text-left lg:w-1/2 mb-10 lg:mb-0">
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
+                            Go Cashless,<br/> Grow Seamless!
+                        </h1>
+                        <p className="text-xl text-white/90 mb-8">
+                            Choose Castles Technology’s Android Payment Terminals for a smarter, more secure, and future-ready payment solution. 
+                        </p>
+                        <a 
+                            href="contacts.html"
+                            className="inline-block px-8 py-4 bg-red-500 text-white font-bold rounded-full shadow-lg hover:bg-red-600 transform hover:scale-105 transition-transform duration-300"
+                        >
+                            Start Now
+                        </a>
+                    </div>
+                    <div className="lg:w-1/2 flex justify-center lg:justify-end relative">
+                        <div className="relative">
+                            <img src="resources/pos.png" onError="this.onerror=null;this.src='https://placehold.co/400x400/2c2c2c/ffffff?text=POS+Terminal';" alt="POS Terminal" className="max-w-sm sm:max-w-md lg:max-w-2xl z-10 relative" />
+                            <div ref={handRef} className="absolute z-20" style={{ transform: 'rotate(15deg)', transformOrigin: 'bottom right', right: '-10rem', bottom: '5rem' }}>
+                                <img src="resources/hand2.png" onError="this.onerror=null;this.src='https://placehold.co/300x300/2c2c2c/ffffff?text=Hand';" alt="Hand" className="w-96 h-auto"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section className="py-20 bg-white">
+                <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center lg:space-x-12">
+                    <div className="lg:w-1/2 mb-10 lg:mb-0">
+                        <img src="resources/bg2.png" alt="Product" className="w-full rounded-2xl shadow-xl" />
+                    </div>
+                    <div className="lg:w-1/2 text-center lg:text-left">
+                        <h2 className="text-lg font-bold text-gray-400 uppercase mb-2">About the POS</h2>
+                        <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
+                            Best and Fashionable Smart POS for Easy Life.
+                        </h3>
+                        <p className="text-gray-600 mb-6 leading-relaxed">
+                            Our cutting-edge smart POS system is designed to seamlessly integrate into your business, combining sleek aesthetics with powerful functionality. It's more than just a payment terminal—it's a complete business solution that simplifies operations and enhances customer experience.
+                        </p>
+                        <ul className="space-y-2 text-gray-600">
+                            <li className="flex items-center">
+                                <svg className="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Attractive interface with many options
+                            </li>
+                            <li className="flex items-center">
+                                <svg className="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Live chat and instant notification
+                            </li>
+                            <li className="flex items-center">
+                                <svg className="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Install App with unlimited features
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-16 bg-gray-200">
+                <div className="container mx-auto px-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10">
+                        <div className="text-left">
+                            <h2 className="text-5xl font-extrabold text-gray-900 mb-2">Our Clients and Partners</h2>
+                            <p className="text-xl font-bold text-red-500 mb-6">
+                                Join the ranks of our satisfied partners
+                            </p>
+                            <p className="text-lg text-gray-700 max-w-md ml-0 lg:ml-8">
+                                Boost your sales potential with our solutions, which support the
+                                country’s most widely used payment networks.
+                            </p>
+                        </div>
+                        <div className="space-y-8">
+                            <div className="overflow-hidden marquee-wrapper">
+                                <div className="marquee marquee-row1 flex space-x-12">
+                                    {duplicatedRow1.map((src, index) => (
+                                        <img
+                                            key={`row1-${index}`}
+                                            src={src}
+                                            alt="Payment Partner Logo"
+                                            className="h-16 w-auto flex-shrink-0"
+                                            onError={(e) => { e.target.src = 'resources/placeholder.png'; }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="overflow-hidden marquee-wrapper">
+                                <div className="marquee marquee-row2 flex space-x-12">
+                                    {duplicatedRow2.map((src, index) => (
+                                        <img
+                                            key={`row2-${index}`}
+                                            src={src}
+                                            alt="Payment Partner Logo"
+                                            className="h-16 w-auto flex-shrink-0"
+                                            onError={(e) => { e.target.src = 'resources/placeholder.png'; }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="overflow-hidden marquee-wrapper">
+                                <div className="marquee marquee-row3 flex space-x-12">
+                                    {duplicatedRow3.map((src, index) => (
+                                        <img
+                                            key={`row3-${index}`}
+                                            src={src}
+                                            alt="Payment Partner Logo"
+                                            className="h-16 w-auto flex-shrink-0"
+                                            onError={(e) => { e.target.src = 'resources/placeholder.png'; }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="overflow-hidden marquee-wrapper">
+                                <div className="marquee marquee-row4 flex space-x-12">
+                                    {duplicatedRow4.map((src, index) => (
+                                        <img
+                                            key={`row4-${index}`}
+                                            src={src}
+                                            alt="Payment Partner Logo"
+                                            className="h-16 w-auto flex-shrink-0"
+                                            onError={(e) => { e.target.src = 'resources/placeholder.png'; }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section className="py-20 bg-gray-50">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl sm:text-5xl font-bold text-red-500 mb-4 leading-tight">
+                            Why Choose Us?
+                        </h2>
+                        <p className="text-lg text-gray-700 max-w-xl mx-auto font-bold">
+                            Competitive Pricing, Zero Setup Fees. No Sales Targets
+                        </p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div className="bg-white p-6 rounded-xl text-center shadow-lg border border-red-100 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+                            <div className="bg-red-50 p-3 rounded-full inline-block mb-4">
+                                <img src="resources/supp.png" alt="Helpdesk Icon" className="w-10 h-10" />
+                            </div>
+                            <h4 className="font-bold text-gray-800 text-base mb-2">
+                                Nationwide Helpdesk & On-site Servicing
+                            </h4>
+                            <p className="text-sm text-gray-500">
+                                Top-tier support available nationwide, ensuring you’re never left on your own.
+                            </p>
+                        </div>
+                        <div className="bg-white p-6 rounded-xl text-center shadow-lg border border-red-100 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl mt-0 lg:mt-16">
+                            <div className="bg-red-50 p-3 rounded-full inline-block mb-4">
+                                <img src="resources/bank.png" alt="Bank Icon" className="w-10 h-10" />
+                            </div>
+                            <h4 className="font-bold text-gray-800 text-base mb-2">
+                                Next Banking Day Payments
+                            </h4>
+                            <p className="text-sm text-gray-500">
+                                Get paid without delay, with funds deposited by the next business day.
+                            </p>
+                        </div>
+                        <div className="bg-white p-6 rounded-xl text-center shadow-lg border border-red-100 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+                            <div className="bg-red-50 p-3 rounded-full inline-block mb-4">
+                                <img src="resources/trust.png" alt="Trusted Icon" className="w-10 h-10" />
+                            </div>
+                            <h4 className="font-bold text-gray-800 text-base mb-2">
+                                Trusted Globally
+                            </h4>
+                            <p className="text-sm text-gray-500">
+                                Proudly trusted by local and global banks, as well as major retail outlets.
+                            </p>
+                        </div>
+                        <div className="bg-white p-6 rounded-xl text-center shadow-lg border border-red-100 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl mt-0 lg:mt-16">
+                            <div className="bg-red-50 p-3 rounded-full inline-block mb-4">
+                                <img src="resources/lock.png" alt="Security Icon" className="w-10 h-10" />
+                            </div>
+                            <h4 className="font-bold text-gray-800 text-base mb-2">
+                                Seamless & Secure
+                            </h4>
+                            <p className="text-sm text-gray-500">
+                                Our solutions are built for simplicity, ensuring a seamless and secure experience.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <ShowcaseTerminalSection />
+            <ContactSection />
+            <Footer />
+        </React.Fragment>
+    );
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
 </script>
 </body>
 </html>
