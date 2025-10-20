@@ -128,29 +128,33 @@
     };
 
     const Helpdesk = () => {
-      // Corrected FAQs to use <strong> tags inside the question string.
-      // The bold class is added to the <strong> tag for Tailwind styling.
-      const faqs = [
+    // Merged the two previous FAQs into a single, comprehensive entry.
+    const faqs = [
         {
-          question: "What are the requirements to apply as a <strong class='font-bold'>merchant</strong>?",
-          // FIX APPLIED: The answer is a string with HTML tags, but now the FAQItem handles it.
-          answer: "To qualify, you should have a <strong className='font-bold'>physical business location</strong> with <strong className='font-bold'>clear signage</strong> and <strong className='font-bold'>visible inventory</strong> or <strong className='font-bold'>stocks</strong>. (Optional: Attach photos of the <strong className='font-bold'>business premises</strong>)"
-        },
-        {
-          question: "For Application Submission",
-          // This answer is already a JSX element (<ul>), so it renders correctly.
-          answer: (
-            <ul className="list-disc pl-5 space-y-2">
-              <li><strong className='font-bold'>Duly signed Application Forms</strong> (hard copies)</li>
-              <li><strong className='font-bold'>DTI Certificate</strong> – for Single Proprietorship</li>
-              <li><strong className='font-bold'>SEC Registration</strong> with <strong className='font-bold'>Articles and By-Laws</strong> – for Corporation / OPC</li>
-              <li><strong className='font-bold'>Updated General Information Sheet (GIS)</strong> – if applicable</li>
-              <li><strong className='font-bold'>BIR Certificate of Registration (Form 2303)</strong></li>
-              <li><strong className='font-bold'>Valid Business Permit</strong></li>
-              <li><strong className='font-bold'>Proof of Bank Account</strong> under the registered <strong className='font-bold'>business name</strong> (for settlement purposes)</li>
-              <li><strong className='font-bold'>Valid IDs</strong> of <strong className='font-bold'>Authorized Signatories</strong></li>
-            </ul>
-          )
+            question: "What are the requirements to apply as a <strong class='font-bold'>merchant</strong>?",
+            // The answer is now a single JSX element combining the text requirement 
+            // and the submission documentation list.
+            answer: (
+                <div className="space-y-4">
+                    {/* Part 1: Physical Business Requirements */}
+                    <p>
+                        To qualify, you should have a <strong className='font-bold'>physical business location</strong> with <strong className='font-bold'>clear signage</strong> and <strong className='font-bold'>visible inventory</strong> or <strong className='font-bold'>stocks</strong>. (Optional: Attach photos of the <strong className='font-bold'>business premises</strong>)
+                    </p>
+
+                    {/* Part 2: Required Documentation for Application Submission */}
+                    <h4 className="text-md font-semibold text-gray-800 pt-2">For Application Submission, please prepare the following documents:</h4>
+                    <ul className="list-disc pl-5 space-y-2 text-gray-600">
+                        <li><strong className='font-bold'>Duly signed Application Forms</strong> (hard copies)</li>
+                        <li><strong className='font-bold'>DTI Certificate</strong> – for Single Proprietorship</li>
+                        <li><strong className='font-bold'>SEC Registration</strong> with <strong className='font-bold'>Articles and By-Laws</strong> – for Corporation / OPC</li>
+                        <li><strong className='font-bold'>Updated General Information Sheet (GIS)</strong> – if applicable</li>
+                        <li><strong className='font-bold'>BIR Certificate of Registration (Form 2303)</strong></li>
+                        <li><strong className='font-bold'>Valid Business Permit</strong></li>
+                        <li><strong className='font-bold'>Proof of Bank Account</strong> under the registered <strong className='font-bold'>business name</strong> (for settlement purposes)</li>
+                        <li><strong className='font-bold'>Valid IDs</strong> of <strong className='font-bold'>Authorized Signatories</strong></li>
+                    </ul>
+                </div>
+            )
         },
         {
           question: "What is the usual processing time for an <strong class='font-bold'>application</strong>?",
@@ -212,7 +216,7 @@
                   <h3 className="text-2xl font-bold text-gray-800 mb-4 text-center">Resources</h3>
                   <div className="text-gray-600 text-center">
                     <p className="mb-2"><strong>Downloads:</strong> <a href="#" className="text-red-600 hover:underline">Terminal Operating Guide (Manual)</a>, <a href="#" className="text-red-600 hover:underline">Onboarding Guidelines</a></p>
-                    <p className="mb-2"><strong>Video Links:</strong> <a href="#" className="text-red-600 hover:underline">CCAP - Fraud Prevention Guidelines</a></p>
+                    <p className="mb-2"><strong>Video Links:</strong> <a href="https://www.youtube.com/watch?v=9mYroFulkfE" className="text-red-600 hover:underline">CCAP - Fraud Prevention Guidelines</a></p>
                   </div>
                 </div>
               </div>
