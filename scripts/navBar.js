@@ -26,7 +26,7 @@ const navItems = [
                 items: [
                     { name: "S1F2A", href: "product1.html" },
                     { name: "MINI", href: "product2.html" },
-                    { name: "S1F4", href: "product3.html" }
+                    { name: "S1F1", href: "product3.html" }
                 ]
             }
         ]

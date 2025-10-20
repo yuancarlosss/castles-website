@@ -105,14 +105,14 @@
               </p>
               {/* Product Name stands out with large, bold font and red accent */}
               <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black text-gray-900 leading-none">
-                S1F4
+                S1F1
                 {/* Accent color changed to red-500 */}
                 <span className="block text-4xl sm:text-5xl lg:text-6xl font-extrabold text-red-500 mt-2">
                   Terminal
                 </span>
               </h1>
               <p className="text-lg text-gray-600 max-w-lg mx-auto lg:mx-0 pt-4">
-                The S1MINI Terminal offers unparalleled speed and security for all your transactions. Elevate your point-of-sale experience with next-generation processing power.
+                The Castles Technology S1F1 Terminal is a robust, entry-level, and highly portable SmartPOS device designed to accept modern payments on the go.
               </p>
               
               <div className="pt-6 flex flex-col sm:flex-row justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4">
@@ -129,7 +129,7 @@
 
             {/* RIGHT SIDE: Product Image Mockup Container */}
             <HeroImageContainer
-              src="resources/s1f2a-terminal-mockup.png"
+              src="logos/prodz3.png"
               alt="S1MINI Payment Terminal"
               fallbackSrc="resources/pos3.png"
             />
@@ -199,9 +199,9 @@
         description:
         "Our flagship terminal, offering a sleek design with all-in-one functionality for a premium customer experience.",
         images: [
-        "resources/front.png",
-        "resources/back.png",
-        "resources/front.png",
+        "logos/backz3.png",
+        "logos/fontz3.png",
+        "logos/backz3.png",
         ],
     };
 
@@ -214,14 +214,17 @@
         <div className="container mx-auto px-6 max-w-7xl">
             {/* Updated text */}
             <p className="text-sm font-bold text-gray-400 uppercase text-center mb-2">
-            S1F4 Terminal
+            S1F1 Terminal
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold text-red-500 text-center mb-12">
             Sleek, Reliable, and Built for Performance
             </h2>
 
             <div className="animate-fade-in-up text-center">
-            <div className="relative mx-auto w-full overflow-hidden">
+            {/* ⭐ UPDATED CLASSNAME FOR LARGER SIZE ⭐
+              The max-width is now set to 'max-w-xl' and 'lg:max-w-2xl'. 
+            */}
+            <div className="relative mx-auto w-full max-w-xl lg:max-w-2xl overflow-hidden">
                 <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
@@ -265,7 +268,7 @@
         </div>
         </section>
     );
-    };
+};
 
 
     const App = () => (
