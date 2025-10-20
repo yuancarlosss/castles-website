@@ -63,16 +63,21 @@
     }
     .pricing-table-cell:first-child {
         background-color: white !important; /* Ensure category column is always white */
+        min-width: 180px; /* Give the category column a minimum width to prevent collapse */
     }
     /* Hover effect for rows to highlight the category */
     .pricing-table-row:hover .pricing-table-cell:first-child {
         background-color: #fef2f2 !important; /* Light red hover for category */
         color: #b91c1c; /* Darker red text on hover */
     }
-    /* Ensure uniform column widths */
+    /* Ensure uniform column widths, adjusted for 4 columns + category */
     .pricing-table th,
     .pricing-table td {
-      width: 25%; /* Equal width for all columns */
+      min-width: 100px; /* Minimum width for rate columns to look good */
+    }
+    .pricing-table th:not(:first-child),
+    .pricing-table td:not(:first-child) {
+        width: 27.33%; /* Calculated width for 3 rate columns */
     }
   </style>
 </head>
@@ -82,6 +87,7 @@
   <script type="text/babel" src="scripts/navBar.js"></script>
   <script type="text/babel" src="scripts/footer.js"></script>
   <script type="text/babel">
+    const { useState } = React;
 
     const Hero = () => (
       <section className="relative overflow-hidden h-[500px] flex hero-container">
@@ -129,7 +135,13 @@
     },
     "QR Static": {
       QRPH: "2.00%",
-      "WechatPay, Alipay, UnionPay QR": "2.00%"
+      "WechatPay, Alipay, UnionPay QR": "2.00%",
+      // Added dummy values for consistency, but they will render as "-"
+      "VISA, Mastercard": "",
+      "JCB, Unionpay": "",
+      "AMEX and other foreign cards": "",
+      Bancnet: "",
+      "Special Installment Plan": ""
     }
   };
 
@@ -142,14 +154,15 @@
   };
 
   // Icon mappings for payment methods (using placeholder URLs)
+  // FIX: Added clearer text labels for the complex categories
   const ICONS = {
-    "VISA, Mastercard": ["logos/visa.png", "logos/mtr.png"],
-    "JCB, Unionpay": ["logos/jcb.png", "logos/union.png"],
-    "AMEX and other foreign cards": ["logos/american.png"],
-    Bancnet: ["logos/banc.png"],
-    QRPH: ["logos/qr.png"],
-    "WechatPay, Alipay, UnionPay QR": ["logos/wechat.png", "logos/alipay.png", "logos/union.png"],
-    "Special Installment Plan": ["logos/logo_metrob.png", "logos/ps.png"]
+    "VISA, Mastercard": { icons: ["logos/visa.png", "logos/mtr.png"]},
+    "JCB, Unionpay": { icons: ["logos/jcb.png", "logos/union.png"]},
+    "AMEX and other foreign cards": { icons: ["logos/american.png"]},
+    Bancnet: { icons: ["logos/banc.png"]},
+    QRPH: { icons: ["logos/qr.png"]},
+    "WechatPay, Alipay, UnionPay QR": { icons: ["logos/wechat.png", "logos/alipay.png"]},
+    "Special Installment Plan": { icons: ["logos/logo_metrob.png", "logos/ps.png"]}
   };
 
   return (
@@ -159,20 +172,23 @@
           <h2 className="text-4xl sm:text-5xl font-extrabold text-red-600">Accelerate with a Unified Platform</h2>
           <p className="text-lg sm:text-xl text-gray-600 mt-3">Tools and systems for e-commerce, subscriptions, and beyond</p>
         </div>
+        
+        {/* Added overflow-x-auto here to enable horizontal scrolling on mobile */}
         <div className="bg-white p-2 sm:p-4 rounded-2xl shadow-2xl border border-gray-100 overflow-x-auto">
-            <table className="min-w-full text-left border-separate border-spacing-0 pricing-table">
+            {/* Added min-w-[700px] to force horizontal scroll on small screens */}
+            <table className="min-w-[700px] text-left border-separate border-spacing-0 pricing-table w-full">
               <thead>
                 <tr className="shadow-md rounded-xl overflow-hidden">
-                  <th className={`p-4 text-lg font-semibold ${COL_COLORS.category} rounded-tl-xl border-r border-gray-200`}>
-                      <span className="sr-only">Payment Method</span>
+                  <th className={`p-4 text-sm sm:text-lg font-semibold ${COL_COLORS.category} rounded-tl-xl border-r border-gray-200`}>
+                      Payment Method
                   </th>
-                  <th className={`p-4 text-lg font-semibold ${COL_COLORS.Terminal} border-r border-red-500`}>
+                  <th className={`p-4 text-sm sm:text-lg font-semibold ${COL_COLORS.Terminal} border-r border-red-500`}>
                       POS Terminal
                   </th>
-                  <th className={`p-4 text-lg font-semibold ${COL_COLORS.Online} border-r border-gray-700`}>
+                  <th className={`p-4 text-sm sm:text-lg font-semibold ${COL_COLORS.Online} border-r border-gray-700`}>
                       Online
                   </th>
-                  <th className={`p-4 text-lg font-semibold ${COL_COLORS.QRStatic} rounded-tr-xl`}>
+                  <th className={`p-4 text-sm sm:text-lg font-semibold ${COL_COLORS.QRStatic} rounded-tr-xl`}>
                       QR Static
                   </th>
                 </tr>
@@ -180,28 +196,37 @@
               <tbody>
                 {Object.keys(rates.Terminal).map((category, index) => {
                     const isLastRow = index === Object.keys(rates.Terminal).length - 1;
+                    const categoryData = ICONS[category];
+
                     return (
                         <tr key={index} className="pricing-table-row">
-                            <td className={`p-4 text-base font-medium text-gray-800 border-r border-gray-200 pricing-table-cell ${isLastRow ? 'rounded-bl-xl' : ''}`}>
-                                <div className="flex items-center gap-2">
-                                  {ICONS[category]?.map((icon, idx) => (
-                                    <img
-                                      key={idx}
-                                      src={icon}
-                                      alt={category}
-                                      className="w-14 h-14 object-contain"
-                                      onError={(e) => { e.target.src = 'resources/placeholder.png'; }}
-                                    />
-                                  ))}
+                            <td className={`p-3 sm:p-4 text-base font-medium text-gray-800 border-r border-gray-200 pricing-table-cell ${isLastRow ? 'rounded-bl-xl' : ''}`}>
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
+                                  {/* FIX: Reduced icon size for mobile and added responsiveness */}
+                                  <div className="flex gap-1 sm:gap-2">
+                                    {categoryData.icons.map((icon, idx) => (
+                                      <img
+                                        key={idx}
+                                        src={icon}
+                                        alt={category}
+                                        className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+                                        onError={(e) => { e.target.src = 'resources/placeholder.png'; }}
+                                      />
+                                    ))}
+                                  </div>
+                                  {/* FIX: Added label text for clarity on mobile */}
+                                  <span className="text-xs sm:text-sm font-semibold whitespace-nowrap pt-1 sm:pt-0">
+                                    {categoryData.label}
+                                  </span>
                                 </div>
                             </td>
-                            <td className={`p-4 text-base font-bold ${COL_COLORS.Terminal} border-r border-red-500 pricing-table-cell`}>
+                            <td className={`p-3 sm:p-4 text-base font-bold ${COL_COLORS.Terminal} border-r border-red-500 pricing-table-cell`}>
                                 {rates.Terminal[category]}
                             </td>
-                            <td className={`p-4 text-base font-bold ${COL_COLORS.Online} border-r border-gray-700 pricing-table-cell`}>
+                            <td className={`p-3 sm:p-4 text-base font-bold ${COL_COLORS.Online} border-r border-gray-700 pricing-table-cell`}>
                                 {rates.Online[category]}
                             </td>
-                            <td className={`p-4 text-base font-bold ${COL_COLORS.QRStatic} pricing-table-cell ${isLastRow ? 'rounded-br-xl' : ''}`}>
+                            <td className={`p-3 sm:p-4 text-base font-bold ${COL_COLORS.QRStatic} pricing-table-cell ${isLastRow ? 'rounded-br-xl' : ''}`}>
                                 {rates["QR Static"][category] || "-"}
                             </td>
                         </tr>
