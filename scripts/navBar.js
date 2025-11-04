@@ -166,7 +166,7 @@ const Navbar = () => {
         <nav className={navbarClasses}>
             <div className="container mx-auto flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                    <img src={isShrunk ? "resources/castlesalt.png" : "resources/logocastles.png"} onError="this.onerror=null;this.src='https://placehold.co/100x40/ffffff/000000?text=Logo';" alt="Castles Logo" className={logoClasses} />
+                    <img src={isShrunk ? "resources/castlesalt.png" : "resources/logoc.png"} onError="this.onerror=null;this.src='https://placehold.co/100x40/ffffff/000000?text=Logo';" alt="Castles Logo" className={logoClasses} />
                 </div>
                 <div className="hidden lg:flex flex-1 justify-center items-center space-x-8">
                     {navItems.map((item, index) => item.dropdown ? (<DropdownItem key={index} name={item.name} items={item.items} href={item.href} isShrunk={isShrunk} />) : (<a key={index} href={item.href || "#"} className={navItemClasses}>{item.name}</a>))}
